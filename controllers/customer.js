@@ -1,8 +1,8 @@
 const Joi = require('joi');
 const passport = require('passport');
 
-const db = require('../config/db.config.js');
-const Customer = db.customer;
+const db = require('./../models/index');
+const Customer = db.customers;
 const { CustomerSchema } = require('../validators');
 
 async function register (req, res) {

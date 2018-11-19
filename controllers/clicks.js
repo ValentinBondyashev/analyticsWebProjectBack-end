@@ -1,6 +1,6 @@
-const db = require('../config/db.config.js');
+const db = require('./../models/index');
 const Clicks = db.clicks;
-const Users = db.user;
+const Users = db.users;
 
 async function addClicks (req, res) {
     try{
