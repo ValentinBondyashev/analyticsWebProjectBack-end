@@ -5,14 +5,14 @@ const Users = db.user;
 async function addClicks (req, res) {
     try{
         const { body: { click } } = req;
-        click.map(async clik => {
-            await Users.findOne({sessionId: clik.sessionId});
+        click.map(async click => {
+            await Users.findOne({sessionId: click.sessionId});
             try{
-                await Users.create({ sessionId : clik.sessionId});
+                await Users.create({ sessionId : click.sessionId});
             }catch(err){
                 console.log(err);
             }
-            const clicks = await Clicks.create({userSessionId: clik.sessionId ,...clik});
+            const clicks = await Clicks.create({userSessionId: click.sessionId ,...click});
             return res.json({clicks: clicks});
         });
 
