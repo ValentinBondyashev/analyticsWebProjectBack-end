@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const db = require('./db.config');
+const db = require('./../models/index');
 const Customer = db.customer;
 
 passport.use(new LocalStrategy({

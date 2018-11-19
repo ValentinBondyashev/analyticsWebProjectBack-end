@@ -3,4 +3,6 @@ node_modules
 build
 npm-debug.log
 .env
+config
 .DS_Store
+docker-compose.yml
