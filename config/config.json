@@ -5,7 +5,8 @@
     "database": "userdb",
     "host": "127.0.0.1",
     "port": "5430",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   },
   "test": {
     "username": "root",

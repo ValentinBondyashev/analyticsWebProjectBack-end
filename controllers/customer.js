@@ -66,7 +66,7 @@ async function login(req, res, next) {
                     }, process.env.JWT_SECRET);
                     return res.json({token: token});
                 }
-                return status(400).info;
+                return res.status(400);
             })(req, res);
         }
     });

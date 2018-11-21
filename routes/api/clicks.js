@@ -4,6 +4,6 @@ const { ClickController } = require('../../controllers');
 
 router.post('/add', ClickController.addClicks);
 
-router.get('/get/:user', ClickController.getClicks);
+router.get('/get/:session', ClickController.getClicks);
 
 module.exports = router;

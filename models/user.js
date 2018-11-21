@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     sessionId: {
         type: DataTypes.STRING,
         primaryKey: true,
+        unique: true
     },
     site: DataTypes.STRING,
     createdAt: {
