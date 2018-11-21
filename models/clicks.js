@@ -4,17 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     time: DataTypes.DATE,
     localName: DataTypes.STRING,
     innerText: DataTypes.STRING,
-    sessionId: {
-      type: DataTypes.STRING,
-        references: {
-            model: "user",
-            key: "sessionId"
-        }
-    }
+    sessionId:  DataTypes.STRING
   }, {});
 
   clicks.associate = function (models) {
-      models.clicks.belongsTo(models.users, {foreignKey: 'sessionId' });
+      models.clicks.belongsTo(models.users, {foreignKey: 'sessionId'});
   };
 
   clicks.sync({

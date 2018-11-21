@@ -4,10 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       allowNull: false,
       autoIncrement: true,
-      primaryKey: true,
       type: DataTypes.INTEGER
     },
-    sessionId: DataTypes.STRING,
+    sessionId: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+    },
     site: DataTypes.STRING,
     createdAt: {
       allowNull: false,
@@ -20,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   user.associate = function(models) {
-      models.users.hasMany(models.clicks, {foreignKey: 'sessionId' });
+      models.users.hasMany(models.clicks, {foreignKey: 'sessionId'});
   };
 
   user.sync({

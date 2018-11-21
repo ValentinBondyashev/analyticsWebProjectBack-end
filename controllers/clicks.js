@@ -4,15 +4,15 @@ const Users = db.users;
 
 async function addClicks (req, res) {
     try{
-        const { body: { click } } = req;
-        click.map(async clik => {
-            await Users.findOne({sessionId: clik.sessionId});
+        const { body: { clicks } } = req;
+        clicks.map(async click => {
+            await Users.findOne({sessionId: click.sessionId});
             try{
-                await Users.create({ sessionId : clik.sessionId});
+                await Users.create({ sessionId : click.sessionId});
             }catch(err){
                 console.log(err);
             }
-            const clicks = await Clicks.create({userSessionId: clik.sessionId ,...clik});
+            const clicks = await Clicks.create({userSessionId: click.sessionId ,...click});
             return res.json({clicks: clicks});
         });
 
@@ -24,7 +24,7 @@ async function addClicks (req, res) {
 
 async function getClicks (req, res) {
         const { params : { user } } = req;
-        const clicks = await Clicks.findAll({where: {userSessionId: user} ,include:{ model: Users } });
+        const clicks = await Clicks.findAll({where: {sessionId: user} ,include:{ model: Users } });
         return res.json( clicks );
 }
 
