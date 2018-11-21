@@ -1,11 +1,11 @@
 const express = require("express");
 const path = require('path');
+require('dotenv').config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const errorHandler = require('errorhandler');
 const app = express();
 const passport = require('passport');
-
 
 const isProduction = process.env.NODE_ENV === 'production';
 

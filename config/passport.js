@@ -1,7 +1,8 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const db = require('./../models/index');
-const Customer = db.customer;
+const Customer = db.customers;
+const { CustomerServices } = require('../services');
 
 passport.use(new LocalStrategy({
     usernameField: 'customer[email]',
@@ -9,7 +10,8 @@ passport.use(new LocalStrategy({
 }, (email, password, done) => {
     Customer.findOne({ options :{email : email} })
         .then((customer) => {
-            if(!customer || !customer.validatePassword(password)) {
+            const hash = customer.dataValues.hash;
+            if(!customer || !CustomerServices.validatePassword(password, hash)) {
                 return done(null, false, { errors: { 'email or password': 'is invalid' } });
             }
             return done(null, customer.dataValues);

@@ -1,18 +1,18 @@
-const db = require('./../models/index');
+const db = require('../models/index');
 const Clicks = db.clicks;
 const Users = db.users;
 
 async function addClicks (req, res) {
     try{
         const { body: { click } } = req;
-        click.map(async click => {
-            await Users.findOne({sessionId: click.sessionId});
+        click.map(async clik => {
+            await Users.findOne({sessionId: clik.sessionId});
             try{
-                await Users.create({ sessionId : click.sessionId});
+                await Users.create({ sessionId : clik.sessionId});
             }catch(err){
                 console.log(err);
             }
-            const clicks = await Clicks.create({userSessionId: click.sessionId ,...click});
+            const clicks = await Clicks.create({userSessionId: clik.sessionId ,...clik});
             return res.json({clicks: clicks});
         });
 
