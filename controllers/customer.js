@@ -3,7 +3,6 @@ const passport = require('passport');
 const uuidv1 = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-
 const db = require('../models');
 const Customer = db.customers;
 const { CustomerSchema } = require('../validators');
@@ -28,6 +27,7 @@ async function register (req, res) {
                 const token = jwt.sign({
                     email: finalCustomer.email,
                     id: finalCustomer.id,
+                    uuid: finalCustomer.uuid,
                     exp: parseInt(expirationDate.getTime() / 1000, 10),
                 }, process.env.JWT_SECRET);
 
@@ -62,6 +62,7 @@ async function login(req, res, next) {
                     const token = jwt.sign({
                         email: passportUser.email,
                         id: passportUser.id,
+                        uuid: passportUser.uuid,
                         exp: parseInt(expirationDate.getTime() / 1000, 10),
                     }, process.env.JWT_SECRET);
                     return res.json({token: token});

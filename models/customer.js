@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Customer = sequelize.define('customers', {
+    const customer = sequelize.define('customers', {
             uuid: {
                 type: DataTypes.UUID,
                 primaryKey: true
@@ -21,9 +21,13 @@ module.exports = (sequelize, DataTypes) => {
             }
         });
 
-    Customer.sync({
+    customer.associate = function(models) {
+        models.customers.hasMany(models.sites, {foreignKey: 'customerUuid'});
+    };
+
+    customer.sync({
         force: false
     });
 
-    return Customer;
+    return customer;
 };

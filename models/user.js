@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         unique: true
     },
-    site: DataTypes.STRING,
+    siteAddress: DataTypes.STRING,
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE
@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
 
   user.associate = function(models) {
       models.users.hasMany(models.clicks, {foreignKey: 'sessionId'});
+      models.users.hasMany(models.inputs, {foreignKey: 'sessionId'});
+      models.users.belongsTo(models.sites, {foreignKey: 'siteAddress'});
   };
 
   user.sync({
