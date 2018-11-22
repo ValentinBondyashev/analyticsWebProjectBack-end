@@ -1,6 +1,6 @@
-Queries: 
+# Queries: 
 
-  CUSTOMER
+  ## CUSTOMER
 1) Register customer : /api/customer/register (POST)
   	
 		body : {
@@ -17,7 +17,7 @@ Queries:
 				"password": "4231432412"	
 			}
 		}
-  SITE
+  ## SITE
 1) Add new site : /api/sites/add (POST) 
 
 		body: {
@@ -40,7 +40,7 @@ Queries:
 			Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 		}
 		
-  EVENTS
+  ## EVENTS
 1) Add events : /api/events/add (POST)
 
 		body : {
