@@ -30,6 +30,7 @@
 		
   ## SITE
 ### 1) Add new site : /api/sites/add (POST) 
+
 <details>
 <summary>show body</summary>
 
@@ -39,7 +40,9 @@
 		}
 	}
 <details>
+	
 ### 2) Delete site : /api/sites/ (DELETE)
+
 <details>
 <summary>show body</summary>
 
@@ -51,6 +54,7 @@
 <details>
 
 ### 3) Get all sites : /api/sites/ (GET)	
+
 <details>
 <summary>show headers</summary>
 
@@ -59,9 +63,9 @@
 	}
 <details>
 		
-		
   ## EVENTS
 ### 1) Add events : /api/events/add (POST)
+
 <details>
 <summary>show body</summary>
 
@@ -92,6 +96,7 @@
 <details>	
 	
 ### 2) Get all clicks : /api/events/add/get/clicks/:session (GET)	
+
 <details>
 <summary>show headers</summary>
 
@@ -101,6 +106,7 @@
 <details>
 		
 ### 3) Get all inputs : /api/events/add/get/inputs/:session (GET)
+
 <details>
 <summary>show headers</summary>
 
