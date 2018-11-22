@@ -14,7 +14,7 @@ async function addEvents (req, res) {
                     await Users.create({ sessionId : event.sessionId });
                 }
                 const action = await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , ...event });
-                return res.json({key: action});
+                return res.json({success: true});
             });
         }
     }
