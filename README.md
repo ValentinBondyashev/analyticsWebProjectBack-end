@@ -1,7 +1,7 @@
 # Queries: 
 
   ## CUSTOMER
-1) Register customer : /api/customer/register (POST)
+### 1) Registration customer : /api/customer/register (POST)
   	<details>
 	<summary>show body</summary>
 	
@@ -13,7 +13,7 @@
 		}
 	<details>
 		
-2) Login customer : /api/customer/login (POST)
+### 2) Login customer : /api/customer/login (POST)
 
 	<details>
 	<summary>show body</summary>
@@ -27,7 +27,7 @@
 	<details>
 		
   ## SITE
-1) Add new site : /api/sites/add (POST) 
+### 1) Add new site : /api/sites/add (POST) 
 	<details>
 	<summary>show body</summary>
 	
@@ -37,7 +37,7 @@
 			}
 		}
 	<details>
-2) Delete site : /api/sites/ (DELETE)
+### 2) Delete site : /api/sites/ (DELETE)
 	<details>
 	<summary>show body</summary>
 	
@@ -48,7 +48,7 @@
 		}
 	<details>
 
-3) Get all sites : /api/sites/ (GET)	
+### 3) Get all sites : /api/sites/ (GET)	
 	<details>
 	<summary>show headers</summary>
 	
@@ -59,7 +59,7 @@
 		
 		
   ## EVENTS
-1) Add events : /api/events/add (POST)
+### 1) Add events : /api/events/add (POST)
 	<details>
 	<summary>show body</summary>
 	
@@ -89,7 +89,7 @@
 		}
 	<details>	
 	
-2) Get all clicks : /api/events/add/get/clicks/:session (GET)	
+### 2) Get all clicks : /api/events/add/get/clicks/:session (GET)	
 	<details>
 	<summary>show headers</summary>
 	
@@ -98,7 +98,7 @@
 		}
 	<details>
 		
-2) Get all inputs : /api/events/add/get/inputs/:session (GET)
+### 3) Get all inputs : /api/events/add/get/inputs/:session (GET)
 	<details>
 	<summary>show headers</summary>
 	
