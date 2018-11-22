@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const customer = sequelize.define('customers', {
             uuid: {
                 type: DataTypes.UUID,
+                allowNull: false,
                 primaryKey: true
             },
             email: {

@@ -2,14 +2,14 @@
 module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('users', {
     id: {
-      allowNull: false,
-      autoIncrement: true,
-      type: DataTypes.INTEGER
+        allowNull: false,
+        autoIncrement: true,
+        type: DataTypes.INTEGER
     },
     sessionId: {
         type: DataTypes.STRING,
         primaryKey: true,
-        unique: true
+        allowNull: false
     },
     siteAddress: DataTypes.STRING,
     createdAt: {
@@ -31,5 +31,6 @@ module.exports = (sequelize, DataTypes) => {
   user.sync({
       force: false
   });
+
   return user;
 };

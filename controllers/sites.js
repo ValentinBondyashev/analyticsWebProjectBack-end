@@ -25,6 +25,16 @@ async function addSite (req, res) {
     }
 }
 
+async function deleteSite (req, res) {
+    try{
+        const { body: { id } } = req;
+        const deletedSite = await Sites.destroy({where:{id : id}});
+        return res.json({ deletedSite: deletedSite })
+    } catch ( err ) {
+        return res.status(500).json({message: "Error", details: err});
+    }
+}
+
 async function getSites (req, res) {
     try{
         const { headers: { authorization } } = req;
@@ -39,5 +49,6 @@ async function getSites (req, res) {
 
 module.exports = {
     addSite,
-    getSites
+    getSites,
+    deleteSite
 };

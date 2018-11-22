@@ -1,5 +1,5 @@
 module.exports = {
     CustomerController: require('./customer'),
-    ClickController: require('./clicks'),
+    ClickController: require('./events'),
     SitesController: require('./sites')
 };
