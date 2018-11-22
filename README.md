@@ -1,4 +1,5 @@
 Queries: 
+
   CUSTOMER
 1) Register customer : /api/customer/register (POST)
 2) Login customer : /api/customer/login (POST)
