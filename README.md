@@ -3,8 +3,8 @@
   ## CUSTOMER
 ### 1) Registration customer : /api/customer/register (POST)
 
-<details>
-<summary>show body</summary>
+ <details>
+  <summary>show body</summary>
 
 	body : {
 		"customer": {
@@ -12,13 +12,12 @@
 			"password": "4231432412"	
 		}
 	}
-<details>
+ </details>
 	
-		
 ### 2) Login customer : /api/customer/login (POST)
 
-<details>
-<summary>show body</summary>
+ <details>
+  <summary>show body</summary>
 
 	body : {
 		"customer": {
@@ -26,7 +25,8 @@
 			"password": "4231432412"	
 		}
 	}
-<details>
+	
+ </details>
 		
   ## SITE
 ### 1) Add new site : /api/sites/add (POST) 
@@ -39,7 +39,7 @@
 			"site": "fqwefewfe.com"
 		}
 	}
-<details>
+</details>
 	
 ### 2) Delete site : /api/sites/ (DELETE)
 
@@ -51,7 +51,7 @@
 			"id": "1"
 		}
 	}
-<details>
+</details>
 
 ### 3) Get all sites : /api/sites/ (GET)	
 
@@ -61,7 +61,7 @@
 	headers : {
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
-<details>
+</details>
 		
   ## EVENTS
 ### 1) Add events : /api/events/add (POST)
@@ -93,7 +93,7 @@
 		....
 		}
 	}
-<details>	
+</details>	
 	
 ### 2) Get all clicks : /api/events/add/get/clicks/:session (GET)	
 
@@ -103,7 +103,7 @@
 	headers : {
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
-<details>
+</details>
 		
 ### 3) Get all inputs : /api/events/add/get/inputs/:session (GET)
 
@@ -113,4 +113,4 @@
 	headers : {
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
-<details>
+</details>
