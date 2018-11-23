@@ -15,7 +15,15 @@ module.exports = {
         localName: DataTypes.STRING,
         targetId: DataTypes.STRING,
         targetValue: DataTypes.STRING,
-        time: DataTypes.DATE
+        time: DataTypes.DATE,
+        createdAt: {
+            allowNull: false,
+            type: DataTypes.DATE
+        },
+        updatedAt: {
+            allowNull: false,
+            type: DataTypes.DATE
+        }
     });
   },
   down: (queryInterface, Sequelize) => {

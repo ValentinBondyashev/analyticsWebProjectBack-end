@@ -14,7 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       localName: DataTypes.STRING,
       targetId: DataTypes.STRING,
       targetValue: DataTypes.STRING,
-      time: DataTypes.DATE
+      time: DataTypes.DATE,
+      createdAt: {
+          allowNull: false,
+          type: DataTypes.DATE
+      },
+      updatedAt: {
+          allowNull: false,
+          type: DataTypes.DATE
+      }
   }, {});
 
   Input.associate = function(models) {

@@ -30,17 +30,17 @@ async function register (req, res) {
                         uuid: finalCustomer.uuid,
                         exp: parseInt(expirationDate.getTime() / 1000, 10),
                     }, process.env.JWT_SECRET);
-                    return res.json({token: token});
+                    res.json({token: token});
                 } else {
-                    return res.status(400).send(err);
+                    res.status(400).send(err);
                 }
             } catch (err) {
-                return res.status(500).json( err.errors[0].message );
+                res.status(500).json( err.errors[0].message );
             }
         });
     }
     catch (err) {
-        return res.status(500).json({message: "Error", details: err});
+        res.status(500).json({message: "Error", details: err});
     }
 }
 
@@ -58,7 +58,7 @@ async function login(req, res, next) {
                             return next(err);
                         }
                         if(!passportUser){
-                            return res.send({ success : false, message : 'authentication failed' });
+                            res.send({ success : false, message : 'authentication failed' });
                         }
                         if (passportUser) {
                             const today = new Date();
@@ -73,15 +73,15 @@ async function login(req, res, next) {
                             }, process.env.JWT_SECRET);
                             return res.json({token: token});
                         }
-                        return res.status(400);
+                        res.status(400);
                     })(req, res);
                 }
             } catch (err) {
-                return res.status(500).json(err);
+                res.status(500).json(err);
             }
         });
     } catch ( err ) {
-        return res.status(500).json({message: "Error", details: err});
+        res.status(500).json({message: "Error", details: err});
     }
 }
 

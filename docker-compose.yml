@@ -5,11 +5,12 @@ services:
   db:
     image: postgres
     restart: always
-    volumes: 
+    volumes:
       - "./database:/var/lib/postgresql/data"
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
+      POSTGRES_DB: userdb
     ports:
       - 5430:5432
   adminer:

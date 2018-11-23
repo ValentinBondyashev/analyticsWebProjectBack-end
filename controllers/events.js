@@ -13,7 +13,7 @@ async function addEvents (req, res) {
                 if(!user) {
                     await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
                 }
-                const action = await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , ...event });
+                await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , ...event });
                 return res.json({success: true});
             });
         }

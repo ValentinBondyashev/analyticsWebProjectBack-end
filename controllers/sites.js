@@ -24,9 +24,9 @@ async function deleteSite (req, res) {
     try{
         const { body: { uuid } } = req;
         const deletedSite = await Sites.destroy({where:{uuid : uuid}});
-        return res.json({ deletedSite: deletedSite })
+        res.json({ deletedSite: deletedSite })
     } catch ( err ) {
-        return res.status(500).json({message: "Error", details: err});
+        res.status(500).json({message: "Error", details: err});
     }
 }
 
@@ -35,9 +35,9 @@ async function getSites (req, res) {
         const { headers: { authorization } } = req;
         const uuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const sites = await Sites.findAll({ customerUuid : uuid });
-        return res.json({site: sites});
+        res.json({site: sites});
     } catch (err) {
-        return res.status(500).json({message: "Error", details: err});
+        res.status(500).json({message: "Error", details: err});
     }
 }
 

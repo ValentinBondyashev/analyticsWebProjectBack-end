@@ -11,7 +11,15 @@ module.exports = {
             type: DataTypes.UUID,
             allowNull: false
         },
-        address: DataTypes.STRING
+        address: DataTypes.STRING,
+        createdAt: {
+            allowNull: false,
+            type: DataTypes.DATE
+        },
+        updatedAt: {
+            allowNull: false,
+            type: DataTypes.DATE
+        }
     });
   },
   down: (queryInterface, Sequelize) => {
