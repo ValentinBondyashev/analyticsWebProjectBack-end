@@ -16,6 +16,7 @@ module.exports = {
         targetId: DataTypes.STRING,
         targetValue: DataTypes.STRING,
         time: DataTypes.DATE,
+        siteUuid: DataTypes.STRING,
         createdAt: {
             allowNull: false,
             type: DataTypes.DATE

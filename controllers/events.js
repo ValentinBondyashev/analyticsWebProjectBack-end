@@ -1,42 +1,100 @@
 const uuidv1 = require('uuid/v1');
+const { CustomerServices } = require('../services');
+
 const db = require('../models/index');
 const Clicks = db.clicks;
 const Users = db.users;
 const Inputs = db.inputs;
+const Events = db.events;
+const Sites = db.sites;
 
 async function addEvents (req, res) {
     try{
         const { body } = req;
+        const site = await Sites.find({where : {address : req.get('origin')} });
+        const siteUuid = site.dataValues.uuid;
         for(let key in body ){
             body[key].map(async event => {
-                const user = await Users.findOne({where : {sessionId: event.sessionId}});
-                if(!user) {
-                    await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
+                try {
+                    const user = await Users.findOne({where : {sessionId: event.sessionId}});
+                    if(!user) {
+                        await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
+                    }
+                    await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
+                    res.json({success: true});
+                } catch (err) {
+                    res.status(400).json({error: err});
                 }
-                await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , ...event });
-                return res.json({success: true});
             });
         }
     }
     catch (err) {
-        return res.status(500).json({message: "Error", details: err});
+        res.status(400).json({message: "Error", details: err});
+    }
+}
+
+async function attachEvents ( req, res ) {
+    try {
+        const { body : { site } } = req;
+        const { headers: { authorization } } = req;
+        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        site.events.map( async event => {
+            try {
+                const newEvent = {
+                    uuid: uuidv1(),
+                    customerUuid: customerUuid,
+                    siteUuid: site.uuid,
+                    typeEvent: event
+                };
+                await Events.create(newEvent);
+                res.json({ success: true });
+            } catch (err) {
+                res.status(400).json({error: err});
+            }
+        });
+    } catch (err) {
+        res.status(400).json({error: err})
+    }
+}
+
+async function getActions ( req, res ) {
+    try{
+        const { params : { site } } = req;
+        const { headers: { authorization } } = req;
+        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: site }});
+        events.map( async event => {
+            try {
+                const type = event.dataValues.typeEvent;
+                const data = await db[type].findAll({ siteUuid: site });
+                res.json({allEvents: data});
+            } catch (err) {
+                res.status(400).json({error: err});
+            }
+
+        });
+
+    } catch (err) {
+        res.status(400).json({error: err})
     }
 }
 
 async function getClicks (req, res) {
         const { params : { session } } = req;
         const clicks = await Users.findAll({ where: { sessionId: session } ,include : { model: Clicks } });
-        return res.json( clicks );
+        res.json( clicks );
 }
 
 async function getInputs (req, res) {
     const { params : { session } } = req;
     const inputs = await Users.findAll({ where: { sessionId: session } ,include : { model: Inputs } });
-    return res.json( inputs );
+    res.json( inputs );
 }
 
 module.exports = {
     getClicks,
     addEvents,
-    getInputs
+    getInputs,
+    attachEvents,
+    getActions
 };

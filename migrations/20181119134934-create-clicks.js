@@ -14,6 +14,7 @@ module.exports = {
             type: DataTypes.STRING,
             allowNull: false
         },
+        siteUuid: DataTypes.STRING,
         createdAt: {
             allowNull: false,
             type: DataTypes.DATE
