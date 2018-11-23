@@ -114,3 +114,13 @@
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
 </details>
+
+### 4) Get all actions : /api/events/add/get/all/:siteUuid (GET)
+
+<details>
+<summary>show headers</summary>
+
+	headers : {
+		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
+	}
+</details>
