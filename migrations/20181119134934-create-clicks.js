@@ -1,33 +1,19 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface, DataTypes) => {
     return queryInterface.createTable('clicks', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      time: {
-        type: Sequelize.DATE
-      },
-      localName: {
-        type: Sequelize.STRING
-      },
-      innerText: {
-        type: Sequelize.STRING
-      },
-      userSessionId: {
-        type: Sequelize.STRING
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
+        uuid: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            primaryKey: true
+        },
+        time: DataTypes.DATE,
+        localName: DataTypes.STRING,
+        innerText: DataTypes.STRING,
+        sessionId: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     });
   },
   down: (queryInterface, Sequelize) => {

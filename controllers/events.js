@@ -11,7 +11,7 @@ async function addEvents (req, res) {
             body[key].map(async event => {
                 const user = await Users.findOne({where : {sessionId: event.sessionId}});
                 if(!user) {
-                    await Users.create({ sessionId : event.sessionId });
+                    await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
                 }
                 const action = await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , ...event });
                 return res.json({success: true});

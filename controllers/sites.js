@@ -8,19 +8,13 @@ async function addSite (req, res) {
         const { headers: { authorization } } = req;
         const uuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const newSite = {
+            uuid: uuidv1(),
             customerUuid: uuid,
             address: site
         };
         const data = await Sites.create(newSite);
-        try{
-
-        }
-        catch (err){
-            res.status(500).json({ error : uuid })
-        }
         return res.json({site: data});
-    }
-    catch (err) {
+    } catch (err) {
         return res.status(500).json({message: "Error", details: err});
     }
 }
@@ -41,8 +35,7 @@ async function getSites (req, res) {
         const uuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const sites = await Sites.findAll({ customerUuid : uuid });
         return res.json({site: sites});
-    }
-    catch (err) {
+    } catch (err) {
         return res.status(500).json({message: "Error", details: err});
     }
 }

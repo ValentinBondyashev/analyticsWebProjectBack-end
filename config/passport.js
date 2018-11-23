@@ -8,7 +8,7 @@ passport.use(new LocalStrategy({
     usernameField: 'customer[email]',
     passwordField: 'customer[password]',
 }, (email, password, done) => {
-    Customer.findOne({ options :{email : email} })
+    Customer.findOne({ where :{email : email} })
         .then((customer) => {
             const hash = customer.dataValues.hash;
             if(!customer || !CustomerServices.validatePassword(password, hash)) {

@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   clicks.associate = function (models) {
-      models.clicks.belongsTo(models.users, {foreignKey: 'sessionId'});
   };
 
   clicks.sync({

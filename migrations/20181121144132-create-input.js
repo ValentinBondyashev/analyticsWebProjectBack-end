@@ -1,42 +1,24 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Inputs', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      sessionId: {
-        type: Sequelize.STRING
-      },
-      className: {
-        type: Sequelize.STRING
-      },
-      localName: {
-        type: Sequelize.STRING
-      },
-      targetId: {
-        type: Sequelize.STRING
-      },
-      targetValue: {
-        type: Sequelize.STRING
-      },
-      time: {
-        type: Sequelize.DATE
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
+  up: (queryInterface, DataTypes) => {
+    return queryInterface.createTable('inputs', {
+        uuid: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            primaryKey: true
+        },
+        sessionId: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        className: DataTypes.STRING,
+        localName: DataTypes.STRING,
+        targetId: DataTypes.STRING,
+        targetValue: DataTypes.STRING,
+        time: DataTypes.DATE
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Inputs');
+    return queryInterface.dropTable('inputs');
   }
 };
