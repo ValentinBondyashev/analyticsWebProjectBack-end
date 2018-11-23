@@ -48,7 +48,7 @@
 
 	body: {
 		{
-			"id": "1"
+			"uuid": "1"
 		}
 	}
 </details>
