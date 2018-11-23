@@ -1,3 +1,4 @@
+const uuidv1 = require('uuid/v1');
 const { CustomerServices } = require('../services');
 const db = require('../models/index');
 const Sites = db.sites;
@@ -13,16 +14,16 @@ async function addSite (req, res) {
             address: site
         };
         const data = await Sites.create(newSite);
-        return res.json({site: data});
+        res.json({site: data});
     } catch (err) {
-        return res.status(500).json({message: "Error", details: err});
+        res.status(500).json({message: "Error", details: err});
     }
 }
 
 async function deleteSite (req, res) {
     try{
-        const { body: { id } } = req;
-        const deletedSite = await Sites.destroy({where:{id : id}});
+        const { body: { uuid } } = req;
+        const deletedSite = await Sites.destroy({where:{uuid : uuid}});
         return res.json({ deletedSite: deletedSite })
     } catch ( err ) {
         return res.status(500).json({message: "Error", details: err});
