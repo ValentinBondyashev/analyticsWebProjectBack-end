@@ -20,8 +20,9 @@ async function addEvents (req, res) {
                     if(!user) {
                         await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
                     }
-                    const d = await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
-                    console.log(d);
+                    if(db[key]){
+                        await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
+                    }
                     res.json({success: true});
                 } catch (err) {
                     res.status(400).json({error: err});
