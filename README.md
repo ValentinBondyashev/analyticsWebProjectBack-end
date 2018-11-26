@@ -170,3 +170,32 @@
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
 </details>
+### 5) Attach events : /api/events/attach (POST)
+
+<details>
+<summary>show headers</summary>
+
+	headers : {
+		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
+	}
+</details>
+<details>
+<summary>show body</summary>
+
+	{
+	"site": {
+		"uuid": "c2955650-ef27-11e8-a747-d571d2ef82aa", //uuid site
+		"events": ["clicks", "inputs"]
+	}
+	}
+</details>
+
+### 6) Get all actions : /api/events/:typeEvent/:site (GET)
+
+<details>
+<summary>show headers</summary>
+
+	headers : {
+		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
+	}
+</details>
