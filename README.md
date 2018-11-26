@@ -161,7 +161,7 @@
 	}
 </details>
 
-### 4) Get all actions : /api/events/add/get/all/:siteUuid (GET)
+### 4) Get all actions : /api/events/all/:siteUuid (GET)
 
 <details>
 <summary>show headers</summary>
