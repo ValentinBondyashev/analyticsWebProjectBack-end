@@ -141,7 +141,7 @@
 	}
 </details>	
 	
-### 2) Get all clicks : /api/events/add/get/clicks/:session (GET)	
+### 2) Get all clicks : /api/events/get/clicks/:session (GET)	
 
 <details>
 <summary>show headers</summary>
@@ -151,7 +151,7 @@
 	}
 </details>
 		
-### 3) Get all inputs : /api/events/add/get/inputs/:session (GET)
+### 3) Get all inputs : /api/events/get/inputs/:session (GET)
 
 <details>
 <summary>show headers</summary>
