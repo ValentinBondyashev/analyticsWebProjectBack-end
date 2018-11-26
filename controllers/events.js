@@ -20,7 +20,8 @@ async function addEvents (req, res) {
                     if(!user) {
                         await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
                     }
-                    await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
+                    const d = await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
+                    console.log(d);
                     res.json({success: true});
                 } catch (err) {
                     res.status(400).json({error: err});
@@ -66,12 +67,36 @@ async function getActions ( req, res ) {
         events.map( async event => {
             try {
                 const type = event.dataValues.typeEvent;
-                const data = await db[type].findAll({ siteUuid: site });
+                const data = await db[type].findAll({ where : { siteUuid: site }});
                 res.json({allEvents: data});
             } catch (err) {
                 res.status(400).json({error: err});
             }
+        });
+    } catch (err) {
+        res.status(400).json({error: err})
+    }
+}
 
+
+async function getEvents (req, res) {
+    try{
+        const { params : { site } } = req;
+        const { headers: { authorization } } = req;
+        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: site }});
+        events.map( async event => {
+            try {
+                const type = event.dataValues.typeEvent;
+                if(type === req.params.event){
+                    const data = await db[type].findAll({ siteUuid: site });
+                    const result = {};
+                    result[event.dataValues.typeEvent] = data;
+                    res.json(result);
+                }
+            } catch (err) {
+                res.status(400).json({error: err});
+            }
         });
 
     } catch (err) {
@@ -96,5 +121,6 @@ module.exports = {
     addEvents,
     getInputs,
     attachEvents,
-    getActions
+    getActions,
+    getEvents
 };
