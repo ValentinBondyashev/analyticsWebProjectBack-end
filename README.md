@@ -170,6 +170,8 @@
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
 </details>
+
+
 ### 5) Attach events : /api/events/attach (POST)
 
 <details>
@@ -179,6 +181,7 @@
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
 </details>
+
 <details>
 <summary>show body</summary>
 
