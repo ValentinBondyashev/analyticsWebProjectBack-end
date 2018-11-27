@@ -70,7 +70,7 @@ async function getActions ( req, res ) {
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: site }});
-        events.map( async event => {
+        events.length && events.map( async event => {
             try {
                 const type = event.dataValues.typeEvent;
                 const data = await db[type].findAll({ where : { siteUuid: site }});
@@ -79,8 +79,9 @@ async function getActions ( req, res ) {
                 res.status(400).json({error: err});
             }
         });
+        res.status(200).json({ allEvents: [] })
     } catch (err) {
-        res.status(400).json({error: err})
+        res.status(400).json({ error: err })
     }
 }
 
