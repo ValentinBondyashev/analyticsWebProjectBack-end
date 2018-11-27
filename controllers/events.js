@@ -48,8 +48,13 @@ async function attachEvents ( req, res ) {
                     siteUuid: site.uuid,
                     typeEvent: event
                 };
-                await Events.create(newEvent);
-                res.json({ success: true });
+                const availableEvent = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: event}});
+                if(!availableEvent){
+                    await Events.create(newEvent);
+                    res.json({ success: true });
+                }else{
+                    res.json({ success: true });
+                }
             } catch (err) {
                 res.status(400).json({error: err});
             }

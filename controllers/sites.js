@@ -8,13 +8,18 @@ async function addSite (req, res) {
         const { body: { site } } = req;
         const { headers: { authorization } } = req;
         const uuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        const newSite = {
-            uuid: uuidv1(),
-            customerUuid: uuid,
-            address: site
-        };
-        const data = await Sites.create(newSite);
-        res.json({site: data});
+        const availableSite = await Sites.findOne({ where: { customerUuid: uuid, address: site }});
+        if(!availableSite) {
+            const newSite = {
+                uuid: uuidv1(),
+                customerUuid: uuid,
+                address: site
+            };
+            const data = await Sites.create(newSite);
+            res.json({site: data});
+        } else {
+            res.status(400).json({error: 'this site already exists'})
+        }
     } catch (err) {
         res.status(500).json({message: "Error", details: err});
     }
