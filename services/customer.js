@@ -1,6 +1,6 @@
 const jwtDecode = require('jwt-decode');
 const crypto = require('crypto');
-
+const jwt = require('jsonwebtoken');
 /*
     token - your token
     info - information that you want get
@@ -16,7 +16,21 @@ const validatePassword = (password, hash) => {
     return hash === newHash;
 };
 
+const generToken = (customer) => {
+    const today = new Date();
+    const expirationDate = new Date(today);
+    expirationDate.setDate(today.getDate() + 60);
+    const token = jwt.sign({
+        email: customer.email,
+        id: customer.id,
+        uuid: customer.uuid,
+        exp: parseInt(expirationDate.getTime() / 1000, 10),
+    }, process.env.JWT_SECRET);
+    return token
+};
+
 module.exports = {
     getCustomerInfo,
-    validatePassword
+    validatePassword,
+    generToken
 };

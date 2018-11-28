@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         targetId: DataTypes.STRING,
         targetValue: DataTypes.STRING,
         time: DataTypes.DATE,
-        siteUuid: DataTypes.STRING,
+        siteUuid: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         createdAt: {
             allowNull: false,
             type: DataTypes.DATE

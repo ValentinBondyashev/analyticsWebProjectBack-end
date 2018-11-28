@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: false
         },
-        address: DataTypes.STRING,
+        address: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         createdAt: {
             allowNull: false,
             type: DataTypes.DATE

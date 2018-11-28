@@ -8,13 +8,16 @@ module.exports = {
                 allowNull: false,
             },
             siteUuid: {
-                type: DataTypes.STRING
+                type: DataTypes.STRING,
+                allowNull: false
             },
             customerUuid: {
-                type: DataTypes.STRING
+                type: DataTypes.STRING,
+                allowNull: false
             },
             typeEvent: {
-                type: DataTypes.STRING
+                type: DataTypes.STRING,
+                allowNull: false
             },
             createdAt: {
                 allowNull: false,

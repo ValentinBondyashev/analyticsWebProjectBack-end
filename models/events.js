@@ -6,9 +6,18 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         },
-        siteUuid: DataTypes.STRING,
-        customerUuid: DataTypes.STRING,
-        typeEvent: DataTypes.STRING,
+        siteUuid: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        customerUuid: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        typeEvent:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         createdAt: {
             allowNull: false,
             type: DataTypes.DATE
@@ -21,5 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     events.associate = function(models) {
         // associations can be defined here
     };
+    events.sync({
+        force: false
+    });
     return events;
 };
