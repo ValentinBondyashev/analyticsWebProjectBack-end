@@ -8,7 +8,6 @@ const app = express();
 const passport = require('passport');
 
 const isProduction = process.env.NODE_ENV === 'production';
-
 app.use(cors());
 app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));

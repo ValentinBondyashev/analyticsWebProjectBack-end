@@ -16,7 +16,7 @@ async function addEvents (req, res) {
         for(let key in body ){
             body[key].map(async event => {
                 try {
-                    const user = await Users.findOne({where : {sessionId: event.sessionId}});
+                    const user = await Users.findOne({ where : { sessionId: event.sessionId }});
                     if(!user) {
                         await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
                     }
@@ -48,7 +48,7 @@ async function attachEvents ( req, res ) {
                     siteUuid: site.uuid,
                     typeEvent: event
                 };
-                const availableEvent = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: event}});
+                const availableEvent = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: event }});
                 if(!availableEvent){
                     await Events.create(newEvent);
                     res.json({ success: true });
@@ -69,17 +69,20 @@ async function getActions ( req, res ) {
         const { params : { site } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: site }});
-        events.length && events.map( async event => {
-            try {
-                const type = event.dataValues.typeEvent;
-                const data = await db[type].findAll({ where : { siteUuid: site }});
-                res.json({allEvents: data});
-            } catch (err) {
-                res.status(400).json({error: err});
-            }
-        });
-        res.status(200).json({ allEvents: [] })
+        const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
+        if(events.length){
+            events.map( async event => {
+                try {
+                    const type = event.dataValues.typeEvent;
+                    const data = await db[type].findAll({ where : { siteUuid: site }});
+                    res.json({allEvents: data});
+                } catch (err) {
+                    res.status(400).json({error: err});
+                }
+            });
+        } else{
+            res.status(400).json({error: 'no events exist'});
+        }
     } catch (err) {
         res.status(400).json({ error: err })
     }
@@ -92,20 +95,24 @@ async function getEvents (req, res) {
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: site }});
-        events.map( async event => {
-            try {
-                const type = event.dataValues.typeEvent;
-                if(type === req.params.event){
-                    const data = await db[type].findAll({ siteUuid: site });
-                    const result = {};
-                    result[event.dataValues.typeEvent] = data;
-                    res.json(result);
+        if(events.length){
+            events.map( async event => {
+                try {
+                    const type = event.dataValues.typeEvent;
+                    if(type === req.params.event){
+                        const data = await db[type].findAll({ where: { siteUuid: site }} );
+                        const result = {};
+                        result[event.dataValues.typeEvent] = data;
+                        console.log(result);
+                        res.json(result);
+                    }
+                } catch (err) {
+                    res.status(400).json({error: err});
                 }
-            } catch (err) {
-                res.status(400).json({error: err});
-            }
-        });
-
+            });
+        }else{
+            res.status(400).json({error: 'events with that type no exist'});
+        }
     } catch (err) {
         res.status(400).json({error: err})
     }
@@ -125,7 +132,7 @@ async function getInputs (req, res) {
 
 module.exports = {
     getClicks,
-    addEvents,
+        addEvents,
     getInputs,
     attachEvents,
     getActions,
