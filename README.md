@@ -193,7 +193,7 @@
 	}
 </details>
 
-### 6) Get all actions : /api/events/:typeEvent/:site (GET)
+### 6) Get all actions by type : /api/events/:typeEvent/:site (GET)
 
 <details>
 <summary>show headers</summary>
