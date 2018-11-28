@@ -202,3 +202,14 @@
 		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
 	}
 </details>
+
+### 7) Get all attached events : /api/events/attach/:site (POST)
+
+<details>
+<summary>show headers</summary>
+
+	headers : {
+		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
+	}
+</details>
+
