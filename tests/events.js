@@ -139,5 +139,25 @@ describe('Events', () => {
                 });
         });
     });
+
+    describe('/GET all attach', () => {
+        it('it should GET all attach', (done) => {
+            db.sites.findOne({where: {address: 'test1.com'}})
+                .then((site) =>{
+                    db.customers.findOne({where: { email: 'test@test.test'}})
+                        .then((customer) => {
+                            chai.request(server)
+                                .get('/api/events/attach/' + site.dataValues.uuid)
+                                .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('events');
+                                    done();
+                                })
+                        });
+                });
+        });
+    });
 });
 

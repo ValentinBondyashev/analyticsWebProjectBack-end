@@ -88,6 +88,21 @@ async function getActions ( req, res ) {
     }
 }
 
+async function getAttachEvents (req, res) {
+    try{
+        const { params : { site } } = req;
+        const { headers: { authorization } } = req;
+        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
+        let result = [];
+        events.map( event => {
+            result.push(event.dataValues.typeEvent);
+        });
+        res.json({events: result})
+    } catch (err) {
+        res.status(400).json({error: err});
+    }
+}
 
 async function getEvents (req, res) {
     try{
@@ -103,7 +118,6 @@ async function getEvents (req, res) {
                         const data = await db[type].findAll({ where: { siteUuid: site }} );
                         const result = {};
                         result[event.dataValues.typeEvent] = data;
-                        console.log(result);
                         res.json(result);
                     }
                 } catch (err) {
@@ -132,9 +146,10 @@ async function getInputs (req, res) {
 
 module.exports = {
     getClicks,
-        addEvents,
+    addEvents,
     getInputs,
     attachEvents,
+    getAttachEvents,
     getActions,
     getEvents
 };
