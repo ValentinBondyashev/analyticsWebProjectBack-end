@@ -225,6 +225,6 @@
 
 	{
 		"siteUuid": "c2955650-ef27-11e8-a747-d571d2ef82aa",
-		"event": "press"
+		"events": ["clicks", "inputs"]
 	}
 </details>
