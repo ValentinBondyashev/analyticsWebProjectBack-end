@@ -8,7 +8,7 @@ router.post('/attach', ClickController.attachEvents);
 
 router.get('/attach/:site', ClickController.getAttachedEvents);
 
-router.get('/all/:site', ClickController.getActions);
+router.get('/all/:site/:filter*?', ClickController.getActions);
 
 router.get('/:event/:site', ClickController.getEvents);
 

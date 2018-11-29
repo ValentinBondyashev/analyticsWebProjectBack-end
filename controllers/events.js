@@ -65,6 +65,7 @@ async function attachEvents ( req, res ) {
 async function getActions ( req, res ) {
     try{
         const { params : { site } } = req;
+        const { params : { filter } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
@@ -72,8 +73,13 @@ async function getActions ( req, res ) {
             events.map( async event => {
                 try {
                     const type = event.dataValues.typeEvent;
-                    const data = await db[type].findAll({ where : { siteUuid: site }});
-                    res.json({allEvents: data});
+                    if(filter){
+                        const data = await db[type].findAll({ where : { siteUuid: site }, order: db.sequelize.literal(filter)});
+                        res.json({allEvents: data});
+                    }else {
+                        const data = await db[type].findAll({ where : { siteUuid: site }});
+                        res.json({allEvents: data});
+                    }
                 } catch (err) {
                     res.status(400).json({error: err});
                 }
