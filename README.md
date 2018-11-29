@@ -108,7 +108,32 @@
 		]
 	}
  </details>
-		
+ 
+ ### 4) Edit site address : /api/sites/edit (PUT)	
+
+<details>
+<summary>show headers</summary>
+
+	headers : {
+		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
+	}
+</details>
+	
+<details>
+<summary>show body</summary>
+
+	body: {
+		"uuid":"efb27400-f144-11e8-906c-d55c514f1bc7",  //uuid site that you want edit
+		"address": "new address" 
+	}
+</details>
+
+<details>
+  <summary>show response</summary>
+
+	{ success: true }
+ </details>
+ 
   ## EVENTS
 ### 1) Add events : /api/events/add (POST)
 
