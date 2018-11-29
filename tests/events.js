@@ -140,8 +140,8 @@ describe('Events', () => {
         });
     });
 
-    describe('/GET all attach', () => {
-        it('it should GET all attach', (done) => {
+    describe('/GET all attached events', () => {
+        it('it should GET all attached events', (done) => {
             db.sites.findOne({where: {address: 'test1.com'}})
                 .then((site) =>{
                     db.customers.findOne({where: { email: 'test@test.test'}})
@@ -156,6 +156,18 @@ describe('Events', () => {
                                     done();
                                 })
                         });
+                });
+        });
+    });
+
+    describe('/GET all events type', () => {
+        it('it should GET  all events type', (done) => {
+            chai.request(server)
+                .get('/api/events/allTypes')
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    done();
                 });
         });
     });

@@ -88,7 +88,7 @@ async function getActions ( req, res ) {
     }
 }
 
-async function getAttachEvents (req, res) {
+async function getAttachedEvents (req, res) {
     try{
         const { params : { site } } = req;
         const { headers: { authorization } } = req;
@@ -144,12 +144,18 @@ async function getInputs (req, res) {
     res.json( inputs );
 }
 
+async function getAllTypes (req, res) {
+    const typeEvents = ['clicks', 'inputs'];
+    res.json(typeEvents);
+}
+
 module.exports = {
     getClicks,
     addEvents,
     getInputs,
     attachEvents,
-    getAttachEvents,
+    getAttachedEvents,
     getActions,
-    getEvents
+    getEvents,
+    getAllTypes
 };
