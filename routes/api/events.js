@@ -1,17 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const { ClickController } = require('../../controllers');
+const { EventController } = require('../../controllers');
 
-router.post('/add', ClickController.addEvents);
+router.post('/add', EventController.addEvents);
 
-router.post('/attach', ClickController.attachEvents);
+router.post('/attach', EventController.attachEvents);
 
-router.get('/attach/:site', ClickController.getAttachedEvents);
+router.get('/attach/:site', EventController.getAttachedEvents);
 
-router.get('/all/:site/:filter*?', ClickController.getActions);
+router.get('/all/:site/:filter*?', EventController.getActions);
 
-router.get('/:event/:site', ClickController.getEvents);
+router.get('/:event/:site', EventController.getEvents);
 
-router.get('/allTypes', ClickController.getAllTypes);
+router.get('/allTypes', EventController.getAllTypes);
+
+router.delete('/deleteAttach', EventController.deleteAttachEvent);
 
 module.exports = router;

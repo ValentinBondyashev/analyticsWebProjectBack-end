@@ -1,8 +1,6 @@
 process.env.NODE_ENV = 'test';
 const { CustomerServices } = require('../services');
-const uuidv1 = require('uuid/v1');
 const db = require('../models');
-const Events = db.events;
 
 let chai = require('chai');
 let chaiHttp = require('chai-http');
@@ -98,7 +96,6 @@ describe('Events', () => {
         });
     });
 
-
     describe('/GET get all actions', () => {
         it('it should GET all actions', (done) => {
             db.sites.findOne({where: {address: 'test1.com'}})
@@ -168,6 +165,31 @@ describe('Events', () => {
                     res.body.should.be.a('array');
                     done();
                 });
+        });
+    });
+
+    describe('/DELETE delete attach event', () => {
+        it('it should DELETE delete attach event', (done) => {
+            db.customers.findOne({where: { email: 'test@test.test'}}).then((customer) => {
+                db.sites.findOne({where: {address: 'test1.com'}})
+                    .then((site) => {
+                        const body = {
+                            "siteUuid": site.dataValues.uuid,
+                            "event": "inputs"
+                        };
+                        chai.request(server)
+                            .delete('/api/events/deleteAttach')
+                            .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
+                            .send(body)
+                            .end((err, res) => {
+                                res.should.have.status(200);
+                                res.body.should.be.a('object');
+                                res.body.should.have.property('deletedEvent').eql(1);
+                                done();
+                            })
+                    });
+
+            });
         });
     });
 });
