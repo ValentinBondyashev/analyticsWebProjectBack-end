@@ -46,7 +46,7 @@ async function getSites (req, res) {
     }
 }
 
-async function changeAddress (req, res) {
+async function editAddress (req, res) {
     try{
         const { body: { address, uuid } } = req;
         const { headers: { authorization } } = req;
@@ -62,5 +62,5 @@ module.exports = {
     addSite,
     getSites,
     deleteSite,
-    changeAddress
+    editAddress
 };
