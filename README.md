@@ -72,7 +72,7 @@
 
 	body: {
 		{
-			"uuid": "1"
+			"uuid": "efb27400-f144-11e8-906c-d55c514f1bc7" // uuid site that you want delete
 		}
 	}
 </details>
