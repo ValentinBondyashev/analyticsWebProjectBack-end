@@ -203,7 +203,7 @@
 	}
 </details>
 
-### 7) Get all attached events : /api/events/attach/:site (POST)
+### 7) Get all attached events : /api/events/attach/:site (GET)
 
 <details>
 <summary>show headers</summary>
