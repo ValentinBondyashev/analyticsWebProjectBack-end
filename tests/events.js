@@ -168,14 +168,14 @@ describe('Events', () => {
         });
     });
 
-    describe('/DELETE delete attach event', () => {
-        it('it should DELETE delete attach event', (done) => {
+    describe('/DELETE delete attach events', () => {
+        it('it should DELETE delete attach events', (done) => {
             db.customers.findOne({where: { email: 'test@test.test'}}).then((customer) => {
                 db.sites.findOne({where: {address: 'test1.com'}})
                     .then((site) => {
                         const body = {
                             "siteUuid": site.dataValues.uuid,
-                            "event": "inputs"
+                            "events": ["inputs", "clicks"]
                         };
                         chai.request(server)
                             .delete('/api/events/deleteAttach')
@@ -184,7 +184,7 @@ describe('Events', () => {
                             .end((err, res) => {
                                 res.should.have.status(200);
                                 res.body.should.be.a('object');
-                                res.body.should.have.property('deletedEvent').eql(1);
+                                res.body.should.have.property('success').eql(true);
                                 done();
                             })
                     });

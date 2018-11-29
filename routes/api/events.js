@@ -14,6 +14,6 @@ router.get('/:event/:site', EventController.getEvents);
 
 router.get('/allTypes', EventController.getAllTypes);
 
-router.delete('/deleteAttach', EventController.deleteAttachEvent);
+router.delete('/deleteAttach', EventController.deleteAttachEvents);
 
 module.exports = router;

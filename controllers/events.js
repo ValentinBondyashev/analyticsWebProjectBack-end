@@ -62,13 +62,20 @@ async function attachEvents ( req, res ) {
     }
 }
 
-async function deleteAttachEvent ( req, res ) {
+async function deleteAttachEvents ( req, res ) {
     try {
-        const { body : { siteUuid, event } } = req;
+        const { body : { siteUuid, events } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        const deletedEvent = await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
-        res.json({deletedEvent: deletedEvent})
+        events.map(async (event) => {
+           try {
+               const deletedEvent = await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
+               res.json({success: Boolean(Number(deletedEvent))});
+           } catch( err ){
+               res.status(400).json({error: err});
+           }
+        });
+
     } catch (err) {
         res.status(400).json({error: err})
     }
@@ -160,5 +167,5 @@ module.exports = {
     getActions,
     getEvents,
     getAllTypes,
-    deleteAttachEvent
+    deleteAttachEvents
 };
