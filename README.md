@@ -209,3 +209,22 @@
 </details>
 
 ### 6) Get all types event : /api/events/allTypes (GET)
+
+### 7) Delete events attach : /api/events/deleteAttach (delete)
+
+<details>
+<summary>show headers</summary>
+
+	headers : {
+		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
+	}
+</details>
+
+<details>
+<summary>show body</summary>
+
+	{
+		"siteUuid": "c2955650-ef27-11e8-a747-d571d2ef82aa",
+		"event": "press"
+	}
+</details>
