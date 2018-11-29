@@ -53,6 +53,32 @@ describe('Sites', () => {
             });
         });
     });
+
+    describe('/POST change address', () => {
+        it('it should POST change address', (done) => {
+            db.sites.findOne({where: {address : 'test.com'}})
+                .then((site) => {
+                    const body = {
+                        "uuid" : site.dataValues.uuid,
+                        "address": "test.com"
+                    };
+                    db.customers.findOne({where: { email: 'test@test.test'}}).then((customer) => {
+                        chai.request(server)
+                            .post('/api/sites/change')
+                            .send(body)
+                            .set('Authorization', 'Token '+ CustomerServices.generToken(customer.dataValues))
+                            .end((err, res) => {
+                                res.should.have.status(200 || 400);
+                                res.body.should.be.a('object');
+                                res.body.should.have.property('success').equal(true);
+                                done();
+                            })
+                    });
+                });
+
+        });
+    });
+
     describe('/DELETE site', () => {
         it('it should DELETE site that has not', (done) => {
             chai.request(server)

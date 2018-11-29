@@ -125,7 +125,6 @@ describe('Events', () => {
                 .then((site) =>{
                     db.customers.findOne({where: { email: 'test@test.test'}})
                         .then((customer) => {
-                            console.log(site.dataValues.uuid, "============", CustomerServices.generToken(customer.dataValues));
                             chai.request(server)
                                 .get('/api/events/clicks/' + site.dataValues.uuid)
                                 .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))

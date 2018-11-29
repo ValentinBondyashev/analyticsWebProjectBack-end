@@ -2,9 +2,7 @@ const uuidv1 = require('uuid/v1');
 const { CustomerServices } = require('../services');
 
 const db = require('../models/index');
-const Clicks = db.clicks;
 const Users = db.users;
-const Inputs = db.inputs;
 const Events = db.events;
 const Sites = db.sites;
 
@@ -132,27 +130,13 @@ async function getEvents (req, res) {
     }
 }
 
-async function getClicks (req, res) {
-        const { params : { session } } = req;
-        const clicks = await Users.findAll({ where: { sessionId: session } ,include : { model: Clicks } });
-        res.json( clicks );
-}
-
-async function getInputs (req, res) {
-    const { params : { session } } = req;
-    const inputs = await Users.findAll({ where: { sessionId: session } ,include : { model: Inputs } });
-    res.json( inputs );
-}
-
 async function getAllTypes (req, res) {
     const typeEvents = ['clicks', 'inputs'];
     res.json(typeEvents);
 }
 
 module.exports = {
-    getClicks,
     addEvents,
-    getInputs,
     attachEvents,
     getAttachedEvents,
     getActions,

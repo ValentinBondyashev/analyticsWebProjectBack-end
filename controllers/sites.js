@@ -46,8 +46,21 @@ async function getSites (req, res) {
     }
 }
 
+async function changeAddress (req, res) {
+    try{
+        const { body: { address, uuid } } = req;
+        const { headers: { authorization } } = req;
+        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const updatedSite = await Sites.update({ address : address },{ where: { customerUuid : customerUuid, uuid: uuid }});
+        res.json({success: Boolean(Number(updatedSite))});
+    } catch (err) {
+        res.status(500).json({message: "Error", details: err});
+    }
+}
+
 module.exports = {
     addSite,
     getSites,
-    deleteSite
+    deleteSite,
+    changeAddress
 };
