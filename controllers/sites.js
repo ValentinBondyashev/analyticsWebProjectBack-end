@@ -18,10 +18,10 @@ async function addSite (req, res) {
             const data = await Sites.create(newSite);
             res.json({site: data});
         } else {
-            res.status(400).json({error: 'this site already exists'})
+            res.status(404).json({error: 'this site already exists'})
         }
     } catch (err) {
-        res.status(500).json({message: "Error", details: err});
+        res.status(400).json({message: "Error", details: err});
     }
 }
 
@@ -31,7 +31,7 @@ async function deleteSite (req, res) {
         const deletedSite = await Sites.destroy({where: {uuid : uuid}});
         res.json({ deletedSite: deletedSite })
     } catch ( err ) {
-        res.status(500).json({message: "Error", details: err});
+        res.status(400).json({message: "Error", details: err});
     }
 }
 
@@ -42,7 +42,7 @@ async function getSites (req, res) {
         const sites = await Sites.findAll({ where: { customerUuid : uuid }});
         res.json({site: sites});
     } catch (err) {
-        res.status(500).json({message: "Error", details: err});
+        res.status(400).json({message: "Error", details: err});
     }
 }
 
@@ -54,7 +54,7 @@ async function editAddress (req, res) {
         const updatedSite = await Sites.update({ address : address },{ where: { customerUuid : customerUuid, uuid: uuid }});
         res.json({success: Boolean(Number(updatedSite))});
     } catch (err) {
-        res.status(500).json({message: "Error", details: err});
+        res.status(400).json({message: "Error", details: err});
     }
 }
 

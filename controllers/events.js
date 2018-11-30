@@ -23,7 +23,7 @@ async function addEvents (req, res) {
                     }
                     res.json({success: true});
                 } catch (err) {
-                    res.status(400).json({error: err});
+                    res.status(404).json({error: err});
                 }
             });
         }
@@ -54,7 +54,7 @@ async function attachEvents ( req, res ) {
                     res.json({ success: true });
                 }
             } catch (err) {
-                res.status(400).json({error: err});
+                res.status(404).json({error: err});
             }
         });
     } catch (err) {
@@ -72,7 +72,7 @@ async function deleteAttachEvents ( req, res ) {
                const deletedEvent = await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
                res.json({success: Boolean(Number(deletedEvent))});
            } catch( err ){
-               res.status(400).json({error: err});
+               res.status(404).json({error: err});
            }
         });
 
@@ -92,19 +92,21 @@ async function getActions ( req, res ) {
             events.map( async event => {
                 try {
                     const type = event.dataValues.typeEvent;
+                    let allEvents = {};
                     if(filter){
                         const data = await db[type].findAll({ where : { siteUuid: site }, order: db.sequelize.literal(filter)});
                         res.json({allEvents: data});
                     }else {
                         const data = await db[type].findAll({ where : { siteUuid: site }});
-                        res.json({allEvents: data});
+                        allEvents[type] = data;
+                        res.json({allEvents: allEvents});
                     }
                 } catch (err) {
-                    res.status(400).json({error: err});
+                    res.status(404).json({error: err});
                 }
             });
         } else{
-            res.status(400).json({error: 'no events exist'});
+            res.status(404).json({error: 'no events exist'});
         }
     } catch (err) {
         res.status(400).json({ error: err })
@@ -144,11 +146,11 @@ async function getEvents (req, res) {
                         res.json(result);
                     }
                 } catch (err) {
-                    res.status(400).json({error: err});
+                    res.status(404).json({error: err});
                 }
             });
         }else{
-            res.status(400).json({error: 'events with that type no exist'});
+            res.status(404).json({error: 'events with that type no exist'});
         }
     } catch (err) {
         res.status(400).json({error: err})

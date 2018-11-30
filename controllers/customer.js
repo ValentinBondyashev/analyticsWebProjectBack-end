@@ -35,12 +35,12 @@ async function register (req, res) {
                     res.status(400).send(err);
                 }
             } catch (err) {
-                res.status(500).json( err.errors[0].message );
+                res.status(400).json( err.errors[0].message );
             }
         });
     }
     catch (err) {
-        res.status(500).json({message: "Error", details: err});
+        res.status(400).json({message: "Error", details: err});
     }
 }
 
@@ -77,11 +77,11 @@ async function login(req, res, next) {
                     })(req, res);
                 }
             } catch (err) {
-                res.status(500).json(err);
+                res.status(400).json(err);
             }
         });
     } catch ( err ) {
-        res.status(500).json({message: "Error", details: err});
+        res.status(400).json({message: "Error", details: err});
     }
 }
 
