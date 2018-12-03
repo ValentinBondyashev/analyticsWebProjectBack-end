@@ -90,7 +90,6 @@ async function getActions ( req, res ) {
         const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
         if(events.length){
             let allEvents = {};
-
             await Promise.all(
                 events.map( async event => {
                     try {
@@ -108,7 +107,7 @@ async function getActions ( req, res ) {
                 })
             );
 
-            res.json({ allEvents })
+            res.json(allEvents)
         } else{
             res.status(404).json({error: 'no events exist'});
         }
