@@ -89,22 +89,26 @@ async function getActions ( req, res ) {
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
         if(events.length){
-            events.map( async event => {
-                try {
-                    const type = event.dataValues.typeEvent;
-                    let allEvents = {};
-                    if(filter){
-                        const data = await db[type].findAll({ where : { siteUuid: site }, order: db.sequelize.literal(filter)});
-                        res.json({allEvents: data});
-                    }else {
-                        const data = await db[type].findAll({ where : { siteUuid: site }});
+            let allEvents = {};
+
+            await Promise.all(
+                events.map( async event => {
+                    try {
+                        const type = event.dataValues.typeEvent;
+                        let data;
+                        if(filter){
+                            data = await db[type].findAll({ where : { siteUuid: site }, order: db.sequelize.literal(filter)});
+                        }else {
+                            data = await db[type].findAll({ where : { siteUuid: site }});
+                        }
                         allEvents[type] = data;
-                        res.json({allEvents: allEvents});
+                    } catch (err) {
+                        res.status(404).json({error: err});
                     }
-                } catch (err) {
-                    res.status(404).json({error: err});
-                }
-            });
+                })
+            );
+
+            res.json({ allEvents })
         } else{
             res.status(404).json({error: 'no events exist'});
         }
