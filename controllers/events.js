@@ -5,6 +5,7 @@ const db = require('../models/index');
 const Users = db.users;
 const Events = db.events;
 const Sites = db.sites;
+const Clicks = db.clicks;
 
 async function addEvents (req, res) {
     try{
@@ -65,8 +66,7 @@ async function attachEvents ( req, res ) {
 async function deleteAttachEvents ( req, res ) {
     try {
         const { body : { siteUuid, events } } = req;
-        const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo(req.get('headers'), 'uuid');
         events.map(async (event) => {
            try {
                const deletedEvent = await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
@@ -160,6 +160,31 @@ async function getEvents (req, res) {
     }
 }
 
+async function getAllSortClicks (req, res) {
+    try{
+        const { params : { site } } = req;
+        const { headers: { authorization } } = req;
+        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const event = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site, typeEvent: 'clicks' }});
+        if(event){
+            const clicks = await Clicks.findAll({ where: { siteUuid: site }} );
+            let sortClicks = {};
+            clicks.map((click) => {
+                if (sortClicks.hasOwnProperty(click.className)) {
+                    sortClicks[click.className] = sortClicks[click.className] + 1
+                } else {
+                    sortClicks[click.className] = 1
+                }
+                return null
+            });
+            res.json(sortClicks);
+        }
+        res.status(404).json({error: 'you have\'t that permission'})
+    } catch (err) {
+        res.status(400).json({error: err})
+    }
+}
+
 async function getAllTypes (req, res) {
     const typeEvents = ['clicks', 'inputs'];
     res.json(typeEvents);
@@ -172,5 +197,6 @@ module.exports = {
     getActions,
     getEvents,
     getAllTypes,
-    deleteAttachEvents
+    deleteAttachEvents,
+    getAllSortClicks
 };

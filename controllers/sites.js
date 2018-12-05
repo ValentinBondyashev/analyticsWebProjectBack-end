@@ -18,7 +18,7 @@ async function addSite (req, res) {
             const data = await Sites.create(newSite);
             res.json({site: data});
         } else {
-            res.status(404).json({error: 'this site already exists'})
+            res.status(400).json({error: 'this site already exists'})
         }
     } catch (err) {
         res.status(400).json({message: "Error", details: err});

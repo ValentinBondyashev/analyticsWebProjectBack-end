@@ -49,7 +49,7 @@ describe('Events', () => {
                     .get('/api/events/all/123test123')
                     .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
                     .end((err, res) => {
-                        res.should.have.status(400);
+                        res.should.have.status(404);
                         res.body.should.be.a('object');
                         res.body.should.have.property('error').equal('no events exist');
                         done();

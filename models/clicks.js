@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       time: DataTypes.DATE,
       localName: DataTypes.STRING,
+      className: DataTypes.STRING,
       innerText: DataTypes.STRING,
       sessionId: {
           type: DataTypes.STRING,

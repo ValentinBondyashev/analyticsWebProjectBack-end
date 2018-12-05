@@ -14,6 +14,8 @@ router.get('/:event/:site', EventController.getEvents);
 
 router.get('/allTypes', EventController.getAllTypes);
 
+router.get('/clicks/sort/:site', EventController.getAllSortClicks);
+
 router.delete('/deleteAttach', EventController.deleteAttachEvents);
 
 module.exports = router;
