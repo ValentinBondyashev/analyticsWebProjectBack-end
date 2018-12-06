@@ -228,3 +228,14 @@
 		"events": ["clicks", "inputs"]
 	}
 </details>
+
+### 8) Get sort clicks : /api/events//clicks/sort/:uuidSite (GET) 
+
+<details>
+<summary>show headers</summary>
+
+	headers : {
+		Authorization : Token 12ew1ske21ed12d.e12ed12d23dfqw3f.f324wf43fgq3
+	}
+</details>
+
