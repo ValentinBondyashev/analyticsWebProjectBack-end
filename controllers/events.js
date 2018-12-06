@@ -36,9 +36,9 @@ async function addEvents (req, res) {
 
 async function attachEvents ( req, res ) {
     try {
-        const { body : { site } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const { body : { site } } = req;
         site.events.map( async event => {
             try {
                 const newEvent = {
@@ -65,10 +65,11 @@ async function attachEvents ( req, res ) {
 
 async function deleteAttachEvents ( req, res ) {
     try {
+        const { headers: { authorization } } = req;
+        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const { body : { siteUuid, events } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(req.get('headers'), 'uuid');
         events.map(async (event) => {
-           try {
+            try {
                const deletedEvent = await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
                res.json({success: Boolean(Number(deletedEvent))});
            } catch( err ){
@@ -83,10 +84,9 @@ async function deleteAttachEvents ( req, res ) {
 
 async function getActions ( req, res ) {
     try{
-        const { params : { site } } = req;
-        const { params : { filter } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const { params : { site, filter } } = req;
         const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
         if(events.length){
             let allEvents = {};
@@ -106,7 +106,6 @@ async function getActions ( req, res ) {
                     }
                 })
             );
-
             res.json(allEvents)
         } else{
             res.status(404).json({error: 'no events exist'});
@@ -118,9 +117,9 @@ async function getActions ( req, res ) {
 
 async function getAttachedEvents (req, res) {
     try{
-        const { params : { site } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const { params : { site } } = req;
         const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
         let result = [];
         events.map( event => {
@@ -134,9 +133,9 @@ async function getAttachedEvents (req, res) {
 
 async function getEvents (req, res) {
     try{
-        const { params : { site } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const { params : { site } } = req;
         const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: site }});
         if(events.length){
             events.map( async event => {
@@ -144,6 +143,7 @@ async function getEvents (req, res) {
                     const type = event.dataValues.typeEvent;
                     if(type === req.params.event){
                         const data = await db[type].findAll({ where: { siteUuid: site }} );
+
                         const result = {};
                         result[event.dataValues.typeEvent] = data;
                         res.json(result);
@@ -162,24 +162,27 @@ async function getEvents (req, res) {
 
 async function getAllSortClicks (req, res) {
     try{
-        const { params : { site } } = req;
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const { params : { site } } = req;
         const event = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site, typeEvent: 'clicks' }});
-        if(event){
-            const clicks = await Clicks.findAll({ where: { siteUuid: site }} );
-            let sortClicks = {};
-            clicks.map((click) => {
-                if (sortClicks.hasOwnProperty(click.className)) {
-                    sortClicks[click.className] = sortClicks[click.className] + 1
-                } else {
-                    sortClicks[click.className] = 1
-                }
-                return null
-            });
-            res.json(sortClicks);
+        try{
+            if(event){
+                const clicks = await Clicks.findAll({ where: { siteUuid: site }} );
+                let sortClicks = {};
+                clicks.map((click) => {
+                    if (sortClicks.hasOwnProperty(click.className)) {
+                        sortClicks[click.className] = sortClicks[click.className] + 1
+                    } else {
+                        sortClicks[click.className] = 1
+                    }
+                    return null
+                });
+                res.json(sortClicks);
+            }
+        } catch (e) {
+            res.status(404).json({error: 'you have\'t that permission'})
         }
-        res.status(404).json({error: 'you have\'t that permission'})
     } catch (err) {
         res.status(400).json({error: err})
     }
