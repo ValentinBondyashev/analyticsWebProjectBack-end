@@ -11,6 +11,7 @@ async function addEvents (req, res) {
     try{
         const { body } = req;
         const site = await Sites.find({where : {address : req.get('origin')} });
+
         const siteUuid = site.dataValues.uuid;
         for(let key in body ){
             body[key].map(async event => {
@@ -30,6 +31,7 @@ async function addEvents (req, res) {
         }
     }
     catch (err) {
+        console.log(err, '==================================================');
         res.status(400).json({message: "Error", details: err});
     }
 }
@@ -59,6 +61,7 @@ async function attachEvents ( req, res ) {
             }
         });
     } catch (err) {
+        console.log(err);
         res.status(400).json({error: err})
     }
 }

@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         });
 
     customers.associate = function(models) {
-        models.customers.hasMany(models.sites, {foreignKey: 'customerUuid'});
+        //models.customers.hasMany(models.sites, {foreignKey: 'customerUuid'});
+        models.customers.belongsToMany(models.sites, {as: 'Sites', through: 'watcherSite', foreignKey: 'customerId', otherKey: 'siteId'});
     };
 
     customers.sync({

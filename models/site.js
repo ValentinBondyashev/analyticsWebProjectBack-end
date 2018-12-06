@@ -6,10 +6,6 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             type: DataTypes.UUID
         },
-        customerUuid: {
-            type: DataTypes.UUID,
-            allowNull: false
-        },
         address: {
             type: DataTypes.STRING,
             allowNull: false
@@ -25,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
 
     sites.associate = function(models) {
-        models.sites.hasMany(models.users, {foreignKey: 'uuid'});
+        //models.sites.hasMany(models.users, {foreignKey: 'uuid'});
+        models.sites.belongsToMany(models.customers, {as:'Watcher', through: 'watcherSite', foreignKey: 'siteId', otherKey: 'customerId',});
     };
 
     sites.sync({

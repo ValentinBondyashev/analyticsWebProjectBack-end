@@ -7,10 +7,6 @@ module.exports = {
             primaryKey: true,
             type: DataTypes.UUID
         },
-        customerUuid: {
-            type: DataTypes.UUID,
-            allowNull: false
-        },
         address: {
             type: DataTypes.STRING,
             allowNull: false

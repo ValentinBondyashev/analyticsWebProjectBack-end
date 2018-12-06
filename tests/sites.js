@@ -14,8 +14,7 @@ describe('Sites', () => {
     describe('/GET sites', () => {
         beforeEach((done) => {
             Sites.destroy({
-                where: {},
-                truncate: true
+                where: {}
             });
             done();
         });
@@ -30,7 +29,7 @@ describe('Sites', () => {
                         res.body.should.have.property('site');
                         done();
                     });
-            });
+            }).catch(done);
         });
     });
     describe('/POST add site', () => {
@@ -49,7 +48,7 @@ describe('Sites', () => {
                         res.body.should.have.property('site');
                         done();
                     })
-            });
+            }).catch(done);
         });
     });
 
@@ -73,46 +72,49 @@ describe('Sites', () => {
                                 done();
                             })
                     });
-                });
+                }).catch(done);
 
         });
     });
 
     describe('/DELETE site', () => {
         it('it should DELETE site that has not', (done) => {
-            chai.request(server)
-                .delete('/api/sites/1947f570-f24d-11e8-987a-41b3983474c9')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('deletedSite').eql(0);
-                    done();
-                })
+            db.customers.findOne({where: { email: 'test@test.test'}})
+                .then((customer) => {
+                    chai.request(server)
+                        .delete('/api/sites/1947f570-f24d-11e8-987a-41b3983474c9')
+                        .set('Authorization', 'Token '+ CustomerServices.generToken(customer.dataValues))
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('deletedSite').eql(0);
+                            done();
+                        })
+                }).catch(done);
         });
 
 
         it('it should DELETE site', (done) => {
             db.customers.findOne({where: { email: 'test@test.test'}}).then((customer) => {
                 const uuidSite ='1947f570-f24d-11e8-987a-41b3983474c5';
-                const uuidCustomer = customer.dataValues.uuid;
                 const site = {
                     uuid: uuidSite,
-                    customerUuid: uuidCustomer,
-                    address: 'test.com'
+                    address: 'test1.com'
                 };
                 Sites.create(site)
                     .then(
                         function(){
                             chai.request(server)
                                 .delete('/api/sites/1947f570-f24d-11e8-987a-41b3983474c5')
+                                .set('Authorization', 'Token '+ CustomerServices.generToken(customer.dataValues))
                                 .end((err, res) => {
                                     res.should.have.status(200);
                                     res.body.should.be.a('object');
-                                    res.body.should.have.property('deletedSite').eql(1);
+                                    res.body.should.have.property('deletedSite');
                                     done();
                                 })
                         }
-                    );
+                    ).catch(done);
             });
         });
 
