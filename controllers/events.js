@@ -25,7 +25,7 @@ async function addEvents (req, res) {
                     }
                     res.json({success: true});
                 } catch (err) {
-                    res.status(400).json({error: err});
+                    res.json({error: err});
                 }
             });
         }
