@@ -57,6 +57,7 @@ async function getSites (req, res) {
         const sites = await Sites.findAll({ include: [{
                 model: Customers,
                 as: 'Watcher',
+                attributes: [],
                 where: {uuid: uuid}
             }]});
         res.json({site: sites});

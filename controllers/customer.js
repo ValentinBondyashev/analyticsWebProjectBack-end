@@ -85,7 +85,17 @@ async function login(req, res, next) {
     }
 }
 
+async function redirectToAnalytic (req, res) {
+    try {
+        const { body: { site } } = req;
+        res.redirect(301, site + '/analytic123')
+    } catch( err ) {
+        res.status(400).json({error: err})
+    }
+}
+
 module.exports = {
     register,
     login,
+    redirectToAnalytic
 };

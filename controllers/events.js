@@ -25,13 +25,12 @@ async function addEvents (req, res) {
                     }
                     res.json({success: true});
                 } catch (err) {
-                    res.status(404).json({error: err});
+                    res.status(400).json({error: err});
                 }
             });
         }
     }
     catch (err) {
-        console.log(err, '==================================================');
         res.status(400).json({message: "Error", details: err});
     }
 }
