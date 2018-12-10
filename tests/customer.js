@@ -11,7 +11,7 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('Customers', () => {
+describe('========= ** Customers ** =========', () => {
     describe('/POST register', () => {
         beforeEach((done) => {
             Customers.destroy({

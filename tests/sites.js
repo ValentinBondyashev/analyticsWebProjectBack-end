@@ -10,7 +10,7 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('Sites', () => {
+describe('========= ** Sites ** =========', () => {
     describe('/GET sites', () => {
         beforeEach((done) => {
             Sites.destroy({

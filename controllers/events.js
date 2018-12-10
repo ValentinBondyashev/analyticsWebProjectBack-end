@@ -10,7 +10,7 @@ const Clicks = db.clicks;
 async function addEvents (req, res) {
     try{
         const { body } = req;
-        const site = await Sites.find({where : {address : req.get('origin')} });
+        const site = await Sites.findOne({where : {address : req.get('origin')} });
         const siteUuid = site.uuid;
         for(let key in body ){
             await body[key].map(async event => {

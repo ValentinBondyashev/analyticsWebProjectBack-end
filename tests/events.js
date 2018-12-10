@@ -9,7 +9,7 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('Events', () => {
+describe('========= ** Events ** =========', () => {
     beforeEach((done) => {
         db.clicks.destroy({
             where: {}
