@@ -19,8 +19,9 @@
 	{ token: eyJhbGciOiJIUzI1NiIJ9.LmNvbSIsInV1aWQIMTU0Mjk2NzM5MH0.e5gcG4hsp3eA_eWowOD9HvILYxM }
  </details>
 	
-### 2) Login customer : /api/customer/login (POST)
 
+
+### 2) Login customer : /api/customer/login (POST)
  <details>
   <summary>show body</summary>
 
@@ -210,7 +211,7 @@
 
 ### 6) Get all types event : /api/events/allTypes (GET)
 
-### 7) Delete events attach : /api/events/deleteAttach (delete)
+### 7) Delete events attach : /api/events/deleteAttach (DELETE)
 
 <details>
 <summary>show headers</summary>
@@ -239,3 +240,63 @@
 	}
 </details>
 
+
+## ROUTES
+### 1) Add route : /api/routes/add (POST)
+
+<details>
+<summary>show body</summary>
+
+	body : {
+		 oldUrl: 'localhost/1',
+		 newUrl: 'localhost/2',
+		 sessionId: '123445677'
+	}
+</details>
+	
+### 2) Get all routes : /api/routes/all/:siteUuid (GET)
+
+ <details>
+  <summary>show response</summary>
+
+	{
+    "allRoutes": {
+        "address": "http://localhost:4200",
+        "uuid": "40c197a0-fc5c-11e8-a811-93ae31ef6bbb",
+        "users": [
+            {
+                "sessionId": "1544434128490",
+                "uuid": "015bf810-fc5e-11e8-8d2c-dd50340cecbc",
+                "routes": [
+                    {
+                        "to": "http://localhost:4200/new",
+                        "from": null
+                    }
+                ]
+            },
+            {
+                "sessionId": "1544434137597",
+                "uuid": "06b9b7c0-fc5e-11e8-8d2c-dd50340cecbc",
+                "routes": [
+                    {
+                        "to": "http://localhost:4200/new",
+                        "from": null
+                    },
+                    {
+                        "to": "http://localhost:4200/analize",
+                        "from": "http://localhost:4200/new"
+                    },
+                    {
+                        "to": "http://localhost:4200/new",
+                        "from": "http://localhost:4200/analize"
+                    },
+                    {
+                        "to": "http://localhost:4200/analize",
+                        "from": "http://localhost:4200/new"
+                    }
+                ]
+            }
+        ]
+    }
+}
+ </details>
