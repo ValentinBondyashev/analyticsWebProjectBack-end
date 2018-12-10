@@ -18,7 +18,7 @@ async function addEvents (req, res) {
                 try {
                     const user = await Users.findOne({ where : { sessionId: event.sessionId }});
                     if(!user) {
-                        await Users.create({ uuid: uuidv1(), sessionId : event.sessionId });
+                        await Users.create({ uuid: uuidv1(), sessionId : event.sessionId, siteUuid: siteUuid});
                     }
                     if(db[key]){
                         await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
@@ -60,7 +60,6 @@ async function attachEvents ( req, res ) {
             }
         });
     } catch (err) {
-        console.log(err);
         res.status(400).json({error: err})
     }
 }

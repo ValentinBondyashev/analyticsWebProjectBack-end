@@ -85,17 +85,19 @@ async function login(req, res, next) {
     }
 }
 
-async function redirectToAnalytic (req, res) {
-    try {
-        const { body: { site } } = req;
-        res.redirect(301, site + '/analytic123')
-    } catch( err ) {
-        res.status(400).json({error: err})
-    }
-}
+// async function redirectToAnalytic (req, res) {
+//     try {
+//         //res.redirect('http://localhost:4200/new')
+//         // res.set('Access-Control-Allow-Origin', 'http://localhost:4200');
+//         res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200')
+//         res.writeHead(302, {'Location': 'http://localhost:4200' });
+//         res.end()
+//     } catch( err ) {
+//         res.status(400).json({error: err})
+//     }
+// }
 
 module.exports = {
     register,
-    login,
-    redirectToAnalytic
+    login
 };

@@ -7,7 +7,7 @@ module.exports = {
             allowNull: false,
             primaryKey: true
         },
-        userUuid: {
+        userSessionId: {
             type: DataTypes.STRING,
             allowNull: false
         },

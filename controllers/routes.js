@@ -10,7 +10,7 @@ async function addRoute (req, res) {
         const { body: { oldUrl, newUrl, sessionId } } = req;
         const route = {
             uuid: uuidv1(),
-            userUuid: sessionId,
+            userSessionId: sessionId,
             from: oldUrl,
             to: newUrl
         };
@@ -25,10 +25,16 @@ async function addRoute (req, res) {
 async function getAllRoutes (req, res) {
     try{
         const { params: { site }} = req;
-        const allRoutes = Sites.findAll({
+        const allRoutes = await Sites.findOne({
             where: {uuid: site},
+            attributes: ['address', 'uuid'],
             include: [{
-                model: Users
+                attributes: ['sessionId', 'uuid'],
+                model: Users,
+                include: [{
+                    attributes: ['to', 'from'],
+                    model: Routes
+                }]
             }]
         });
         res.json({allRoutes: allRoutes})

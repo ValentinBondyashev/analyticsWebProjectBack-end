@@ -6,13 +6,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         },
-        userUuid: {
+        userSessionId: {
             type: DataTypes.STRING,
             allowNull: false
         },
         from:{
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING
         },
         to: {
             type: DataTypes.STRING,
@@ -20,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {});
     routes.associate = function(models) {
+        models.routes.belongsTo(models.users)
     };
 
     routes.sync({

@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
         },
+        siteUuid: {
+            type: DataTypes.UUID,
+            allowNull: false
+        },
         createdAt: {
             allowNull: false,
             type: DataTypes.DATE
@@ -21,10 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
 
     users.associate = function(models) {
-        models.users.hasMany(models.clicks, {foreignKey: 'sessionId'});
-        models.users.hasMany(models.inputs, {foreignKey: 'sessionId'});
+        //models.users.hasMany(models.clicks, {foreignKey: 'sessionId'});
+        //models.users.hasMany(models.inputs, {foreignKey: 'sessionId'});
 
-        //models.users.hasMany(models.routes, {foreignKey: 'sessionId'});
+        models.users.belongsTo(models.sites);
+        models.users.hasMany(models.routes);
     };
 
     users.sync({
