@@ -13,7 +13,7 @@ async function addEvents (req, res) {
         const site = await Sites.find({where : {address : req.get('origin')} });
         const siteUuid = site.uuid;
         for(let key in body ){
-            body[key].map(async event => {
+            await body[key].map(async event => {
                 try {
                     const user = await Users.findOne({ where : { sessionId: event.sessionId }});
                     if(!user) {
@@ -22,12 +22,12 @@ async function addEvents (req, res) {
                     if(db[key]){
                         await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
                     }
-                    res.json({success: true});
                 } catch (err) {
                     res.json({error: err});
                 }
             });
         }
+        res.json({success: true});
     }
     catch (err) {
         res.status(400).json({message: "Error", details: err});
@@ -39,25 +39,25 @@ async function attachEvents ( req, res ) {
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const { body : { site } } = req;
-        site.events.map( async event => {
-            try {
-                const newEvent = {
-                    uuid: uuidv1(),
-                    customerUuid: customerUuid,
-                    siteUuid: site.uuid,
-                    typeEvent: event
-                };
-                const availableEvent = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: event }});
-                if(!availableEvent){
-                    await Events.create(newEvent);
-                    res.json({ success: true });
-                }else{
-                    res.json({ success: true });
+        await Promise.all(
+            site.events.map( async event => {
+                try {
+                    const newEvent = {
+                        uuid: uuidv1(),
+                        customerUuid: customerUuid,
+                        siteUuid: site.uuid,
+                        typeEvent: event
+                    };
+                    const availableEvent = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: event }});
+                    if(!availableEvent){
+                        await Events.create(newEvent);
+                    }
+                } catch (err) {
+                    res.status(404).json({error: err});
                 }
-            } catch (err) {
-                res.status(404).json({error: err});
-            }
-        });
+            })
+        );
+        res.json({ success: true });
     } catch (err) {
         res.status(400).json({error: err})
     }
@@ -69,14 +69,12 @@ async function deleteAttachEvents ( req, res ) {
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const { body : { siteUuid, events } } = req;
         events.map(async (event) => {
-            try {
-               const deletedEvent = await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
-               res.json({success: Boolean(Number(deletedEvent))});
+            try {await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
            } catch( err ){
                res.status(404).json({error: err});
            }
         });
-
+        res.json({success: true});
     } catch (err) {
         res.status(400).json({error: err})
     }
