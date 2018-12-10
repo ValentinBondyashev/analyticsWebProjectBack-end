@@ -11,8 +11,7 @@ async function addEvents (req, res) {
     try{
         const { body } = req;
         const site = await Sites.find({where : {address : req.get('origin')} });
-
-        const siteUuid = site.dataValues.uuid;
+        const siteUuid = site.uuid;
         for(let key in body ){
             body[key].map(async event => {
                 try {

@@ -64,7 +64,6 @@ describe('Events', () => {
                 };
                 db.sites.create(site)
                     .then((site) => {
-                        console.log(site.dataValues);
                         const body = {
                             "clicks" : [
                                 {
