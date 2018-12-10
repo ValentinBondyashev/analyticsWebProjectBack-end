@@ -254,7 +254,7 @@
 	}
 </details>
 	
-### 2) Get all routes : /api/routes/:siteUuid (GET)
+### 2) Get all routes : /api/routes/all/:siteUuid (GET)
 
  <details>
   <summary>show response</summary>
