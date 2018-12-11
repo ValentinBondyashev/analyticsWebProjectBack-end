@@ -189,7 +189,7 @@
 	}
 </details>
 
-### 4) Get all actions by type : /api/events/:typeEvent/:site (GET)
+### 4) Get all actions by type : /api/events/get/:typeEvent/:site (GET)
 
 <details>
 <summary>show headers</summary>
@@ -230,7 +230,7 @@
 	}
 </details>
 
-### 8) Get sort clicks : /api/events//clicks/sort/:uuidSite (GET) 
+### 8) Get sort clicks : /api/events/clicks/sort (GET) 
 
 <details>
 <summary>show headers</summary>
