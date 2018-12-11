@@ -162,25 +162,24 @@ async function getAllSortClicks (req, res) {
     try{
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        const { params : { site } } = req;
-        const event = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site, typeEvent: 'clicks' }});
-        try{
-            if(event){
-                const clicks = await Clicks.findAll({ where: { siteUuid: site }} );
-                let sortClicks = {};
-                clicks.map((click) => {
-                    if (sortClicks.hasOwnProperty(click.className)) {
-                        sortClicks[click.className] = sortClicks[click.className] + 1
-                    } else {
-                        sortClicks[click.className] = 1
-                    }
-                    return null
-                });
-                res.json(sortClicks);
-            }
-        } catch (e) {
-            res.status(404).json({error: 'you have\'t that permission'})
+        const site = await Sites.findOne({where : {address : req.get('origin')} });
+        const event = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: 'clicks' }});
+        if(event){
+            const clicks = await Clicks.findAll({ where: { siteUuid: site.uuid }} );
+            let sortClicks = {};
+            clicks.map((click) => {
+                if (sortClicks.hasOwnProperty(click.className)) {
+                    sortClicks[click.className] = sortClicks[click.className] + 1
+                } else {
+                    sortClicks[click.className] = 1
+                }
+                return null
+            });
+            res.json(sortClicks);
+        }else {
+            res.status(404).json({error: 'clicks not found'})
         }
+
     } catch (err) {
         res.status(400).json({error: err})
     }

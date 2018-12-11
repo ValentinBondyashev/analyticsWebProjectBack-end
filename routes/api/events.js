@@ -10,11 +10,11 @@ router.get('/attach/:site', EventController.getAttachedEvents);
 
 router.get('/all/:site/:filter*?', EventController.getActions);
 
-router.get('/:event/:site', EventController.getEvents);
+router.get('/get/:event/:site', EventController.getEvents);
 
 router.get('/allTypes', EventController.getAllTypes);
 
-router.get('/clicks/sort/:site', EventController.getAllSortClicks);
+router.get('/clicks/sort', EventController.getAllSortClicks);
 
 router.delete('/deleteAttach', EventController.deleteAttachEvents);
 

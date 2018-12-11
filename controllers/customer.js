@@ -71,6 +71,8 @@ async function login(req, res, next) {
                                 uuid: passportUser.uuid,
                                 exp: parseInt(expirationDate.getTime() / 1000, 10),
                             }, process.env.JWT_SECRET);
+
+
                             return res.json({token: token});
                         }
                         res.status(400);
@@ -85,17 +87,7 @@ async function login(req, res, next) {
     }
 }
 
-// async function redirectToAnalytic (req, res) {
-//     try {
-//         //res.redirect('http://localhost:4200/new')
-//         // res.set('Access-Control-Allow-Origin', 'http://localhost:4200');
-//         res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200')
-//         res.writeHead(302, {'Location': 'http://localhost:4200' });
-//         res.end()
-//     } catch( err ) {
-//         res.status(400).json({error: err})
-//     }
-// }
+
 
 module.exports = {
     register,

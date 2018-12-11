@@ -22,7 +22,6 @@ const generToken = (customer) => {
     expirationDate.setDate(today.getDate() + 60);
     const token = jwt.sign({
         email: customer.email,
-        id: customer.id,
         uuid: customer.uuid,
         exp: parseInt(expirationDate.getTime() / 1000, 10),
     }, process.env.JWT_SECRET);

@@ -6,6 +6,6 @@ router.post('/register', CustomerController.register);
 
 router.post('/login', CustomerController.login);
 
-//router.get('/redirect', CustomerController.redirectToAnalytic);
+
 
 module.exports = router;
