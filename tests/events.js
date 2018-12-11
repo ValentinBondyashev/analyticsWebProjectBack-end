@@ -118,12 +118,11 @@ describe('/GET Events', () => {
     });
 
     it('it should GET all actions', (done) => {
-        db.sites.findOne({where: {address: 'test1.com'}})
-            .then((site) =>{
                 db.customers.findOne({where: { email: 'test@test.test'}})
                     .then((customer) => {
                         chai.request(server)
-                            .get('/api/events/all/' + site.dataValues.uuid)
+                            .get('/api/events/all/')
+                            .set('Origin', 'test1.com')
                             .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
                             .end((err, res) => {
                                 res.should.have.status(200);
@@ -133,59 +132,53 @@ describe('/GET Events', () => {
                                 done();
                             })
                     }).catch(done);
-            }).catch(done);
     });
 
     it('it should GET all actions by type', (done) => {
-        db.sites.findOne({where: {address: 'test1.com'}})
-            .then((site) => {
-                db.customers.findOne({where: { email: 'test@test.test'}})
-                    .then((customer) => {
-                        chai.request(server)
-                            .get('/api/events/clicks/' + site.dataValues.uuid)
-                            .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
-                            .end((err, res) => {
-                                res.should.have.status(200);
-                                res.body.should.be.a('object');
-                                res.body.should.have.property('clicks');
-                                done();
-                            })
-                    }).catch(done);
+        db.customers.findOne({where: { email: 'test@test.test'}})
+            .then((customer) => {
+                chai.request(server)
+                    .get('/api/events/get/clicks/')
+                    .set('Origin', 'test1.com')
+                    .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('clicks');
+                        done();
+                    })
             }).catch(done);
+
     });
 
     it('it should GET sort clicks', (done) => {
-        db.sites.findOne({where: {address: 'test1.com'}})
-            .then((site) =>{
-                db.customers.findOne({where: { email: 'test@test.test'}})
-                    .then((customer) => {
-                        chai.request(server)
-                            .get('/api/events/clicks/sort/' + site.dataValues.uuid)
-                            .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
-                            .end((err, res) => {
-                                res.should.have.status(200);
-                                res.body.should.be.a('object');
-                                done();
-                            })
-                    }).catch(done);
+        db.customers.findOne({where: { email: 'test@test.test'}})
+            .then((customer) => {
+                chai.request(server)
+                    .get('/api/events/clicks/sort/')
+                    .set('Origin', 'test1.com')
+                    .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        done();
+                    })
             }).catch(done);
     });
 
     it('it should GET all attached events', (done) => {
-        db.sites.findOne({where: {address: 'test1.com'}})
-            .then((site) =>{
-                db.customers.findOne({where: { email: 'test@test.test'}})
-                    .then((customer) => {
-                        chai.request(server)
-                            .get('/api/events/attach/' + site.dataValues.uuid)
-                            .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
-                            .end((err, res) => {
-                                res.should.have.status(200);
-                                res.body.should.be.a('object');
-                                res.body.should.have.property('events');
-                                done();
-                            })
-                    }).catch(done);
+        db.customers.findOne({where: { email: 'test@test.test'}})
+            .then((customer) => {
+                chai.request(server)
+                    .get('/api/events/attach/')
+                    .set('Origin', 'test1.com')
+                    .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.be.a('object');
+                        res.body.should.have.property('events');
+                        done();
+                    })
             }).catch(done);
     });
 

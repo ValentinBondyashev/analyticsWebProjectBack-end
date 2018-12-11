@@ -3,20 +3,20 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('routes', {
         uuid: {
-            type: DataTypes.UUID,
+            type: Sequelize.UUID,
             allowNull: false,
             primaryKey: true
         },
         userSessionId: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: false
         },
         from:{
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: false
         },
         to: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: false
         }
     });
