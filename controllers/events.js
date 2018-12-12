@@ -177,19 +177,20 @@ async function getAllSortClicks (req, res) {
             let sortClicks = [];
             clicks.map((click) => {
                 if(sortClicks.length) {
-                    sortClicks.map(sortClick => {
-                        if (click.className === sortClick.click.className) {
-                            if(click.parent.uuid === sortClick.click.parent.uuid){
-                                sortClick.count = sortClick.count + 1
-                            }else {
-                                sortClicks.push({click, count: 1})
-                            }
-                        } else {
-                            sortClicks.push({click, count: 1})
+                    sortClicks.map((sortClick, index) => {
+                        let check = false;
+                        if (click.className === sortClick.className && click.parent.uuid === sortClick.parent.uuid) {
+                            check = true;
+
+                        }
+                        if(sortClicks.length === index + 1){
+                            check ?
+                                sortClicks[index].count = sortClicks[index].count + 1
+                                :   sortClicks.push(Object.assign(click.dataValues, {count: 1}));
                         }
                     });
                 } else {
-                    sortClicks.push({click, count: 1});
+                    sortClicks.push(Object.assign(click.dataValues, {count: 1}))
                 }
                 return null
             });
