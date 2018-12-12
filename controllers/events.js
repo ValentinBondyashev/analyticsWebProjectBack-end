@@ -177,7 +177,11 @@ async function getAllSortClicks (req, res) {
             let sortClicks = {};
             clicks.map((click) => {
                 if (sortClicks.hasOwnProperty(click.className)) {
-                    sortClicks[click.className].count = sortClicks[click.className].count + 1
+                    if(sortClicks[click.className].parent.uuid === click.parent.uuid){
+                        sortClicks[click.className].count = sortClicks[click.className].count + 1
+                    } else {
+                        sortClicks[click.className] = { count : 1, innerText: click.innerText, localName: click.localName, isTracking: click.isTracking, parent : click.parent }
+                    }
                 } else {
                     sortClicks[click.className] = { count : 1, innerText: click.innerText, localName: click.localName, isTracking: click.isTracking, parent : click.parent }
                 }
