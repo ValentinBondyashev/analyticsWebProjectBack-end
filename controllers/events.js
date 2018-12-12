@@ -174,16 +174,22 @@ async function getAllSortClicks (req, res) {
                         model: Parents
                     }
                 ]});
-            let sortClicks = {};
+            let sortClicks = [];
             clicks.map((click) => {
-                if (sortClicks.hasOwnProperty(click.className)) {
-                    if(sortClicks[click.className].parent.uuid === click.parent.uuid){
-                        sortClicks[click.className].count = sortClicks[click.className].count + 1
-                    } else {
-                        sortClicks[click.className] = { count : 1, innerText: click.innerText, localName: click.localName, isTracking: click.isTracking, parent : click.parent }
-                    }
+                if(sortClicks.length) {
+                    sortClicks.map(sortClick => {
+                        if (click.className === sortClick.click.className) {
+                            if(click.parent.uuid === sortClick.click.parent.uuid){
+                                sortClick.count = sortClick.count + 1
+                            }else {
+                                sortClicks.push({click, count: 1})
+                            }
+                        } else {
+                            sortClicks.push({click, count: 1})
+                        }
+                    });
                 } else {
-                    sortClicks[click.className] = { count : 1, innerText: click.innerText, localName: click.localName, isTracking: click.isTracking, parent : click.parent }
+                    sortClicks.push({click, count: 1});
                 }
                 return null
             });
