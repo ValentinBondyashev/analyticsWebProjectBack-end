@@ -6,6 +6,7 @@ const Users = db.users;
 const Events = db.events;
 const Sites = db.sites;
 const Clicks = db.clicks;
+const Parents = db.parents;
 
 async function addEvents (req, res) {
     try{
@@ -15,15 +16,20 @@ async function addEvents (req, res) {
         for(let key in body ){
             await body[key].map(async event => {
                 try {
-                    const user = await Users.findOne({ where : { sessionId: event.sessionId }});
-                    if(!user) {
-                        await Users.create({ uuid: uuidv1(), sessionId : event.sessionId, siteUuid: siteUuid});
-                    }
-                    if(db[key]){
-                        await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, ...event });
-                    }
+                    const { className, localName, innerText, isTracking } = event.parent;
+                    const parent = await Parents.findOrCreate({where: {className: className, tag: localName}, defaults: {isTracking: isTracking,innerText: innerText, uuid: uuidv1()}  })
+                        .spread(async (parent, created) => {
+                            const parentUuid = parent.get().uuid;
+                            const user = await Users.findOne({ where : { sessionId: event.sessionId }});
+                            if(!user) {
+                                await Users.create({ uuid: uuidv1(), sessionId : event.sessionId, siteUuid: siteUuid});
+                            }
+                            if(db[key]){
+                                await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, parentUuid: parentUuid, ...event });
+                            }
+                        });
                 } catch (err) {
-                    res.json({error: err});
+                    res.status(400).json({error: err});
                 }
             });
         }
@@ -80,7 +86,7 @@ async function deleteAttachEvents ( req, res ) {
     }
 }
 
-async function getActions ( req, res ) {  /**/
+async function getActions ( req, res ) {
     try{
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
@@ -163,13 +169,17 @@ async function getAllSortClicks (req, res) {
         const site = await Sites.findOne({where : {address : req.get('origin')} });
         const event = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: 'clicks' }});
         if(event){
-            const clicks = await Clicks.findAll({ where: { siteUuid: site.uuid }} );
+            const clicks = await Clicks.findAll({ where: { siteUuid: site.uuid }, include: [
+                    {
+                        model: Parents
+                    }
+                ]});
             let sortClicks = {};
             clicks.map((click) => {
                 if (sortClicks.hasOwnProperty(click.className)) {
-                    sortClicks[click.className] = sortClicks[click.className] + 1
+                    sortClicks[click.className].count = sortClicks[click.className].count + 1
                 } else {
-                    sortClicks[click.className] = 1
+                    sortClicks[click.className] = { count : 1, innerText: click.innerText, localName: click.localName, isTracking: click.isTracking, parent : click.parent }
                 }
                 return null
             });

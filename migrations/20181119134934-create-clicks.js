@@ -11,6 +11,11 @@ module.exports = {
         localName: DataTypes.STRING,
         className: DataTypes.STRING,
         innerText: DataTypes.STRING,
+        isTracking: DataTypes.STRING,
+        parentUuid: {
+            type: DataTypes.UUID,
+            allowNull: false
+        },
         sessionId: {
             type: DataTypes.STRING,
             allowNull: false

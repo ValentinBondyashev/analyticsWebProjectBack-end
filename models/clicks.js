@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       localName: DataTypes.STRING,
       className: DataTypes.STRING,
       innerText: DataTypes.STRING,
+      isTracking: DataTypes.STRING,
+      parentUuid: {
+          type: DataTypes.UUID,
+          allowNull: false
+      },
       sessionId: {
           type: DataTypes.STRING,
           allowNull: false
@@ -29,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   clicks.associate = function (models) {
+      models.clicks.belongsTo(models.parents);
   };
 
   clicks.sync({
