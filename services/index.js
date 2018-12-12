@@ -1,3 +1,4 @@
 module.exports = {
-    CustomerServices: require('./customer')
+    CustomerServices: require('./customer'),
+    EventsServices: require('./events')
 };

@@ -101,21 +101,6 @@ describe('========= ** Events ** =========', () => {
 });
 
 describe('/GET Events', () => {
-    it('it should GET all actions but this site has not events', (done) => {
-        db.customers.findOne({where: { email: 'test@test.test'}})
-            .then((customer) => {
-                chai.request(server)
-                    .get('/api/events/all/123test123')
-                    .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
-                    .end((err, res) => {
-                        res.should.have.status(404);
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('error').equal('no events exist');
-                        done();
-                    })
-            }).catch(done);
-
-    });
 
     it('it should GET all actions', (done) => {
                 db.customers.findOne({where: { email: 'test@test.test'}})

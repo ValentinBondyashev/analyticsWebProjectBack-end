@@ -1,6 +1,6 @@
 const uuidv1 = require('uuid/v1');
-const { CustomerServices } = require('../services');
-
+const { CustomerServices, EventsServices } = require('../services');
+const querystring = require('querystring');
 const db = require('../models/index');
 const Users = db.users;
 const Events = db.events;
@@ -84,31 +84,22 @@ async function getActions ( req, res ) {  /**/
     try{
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        const { params : { filter } } = req;
-        let site;
-        if(req.params.site){
-            site = req.params.site;
-        }else {
-            const existingSite = await Sites.findOne({where : {address : req.get('origin')} });
-            site = existingSite.uuid;
-        }
-        const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
+        const query = querystring.parse(req.url);
+        const { filter } = query;
+        const siteUuid = await EventsServices.checkQueryParamsOrOrigin({query: query.site, origin: req.get('origin')});
+        const events = await Events.findAll({ where: { siteUuid: siteUuid, customerUuid: customerUuid }});
         if(events.length){
             let allEvents = {};
             await Promise.all(
                 events.map( async event => {
-                    try {
                         const type = event.dataValues.typeEvent;
                         let data;
                         if(filter){
-                            data = await db[type].findAll({ where : { siteUuid: site }, order: db.sequelize.literal(filter)});
+                            data = await db[type].findAll({ where : { siteUuid: siteUuid }, order: db.sequelize.literal(filter)});
                         }else {
-                            data = await db[type].findAll({ where : { siteUuid: site }});
+                            data = await db[type].findAll({ where : { siteUuid: siteUuid }});
                         }
                         allEvents[type] = data;
-                    } catch (err) {
-                        res.status(404).json({error: err});
-                    }
                 })
             );
             res.json(allEvents)
@@ -124,14 +115,8 @@ async function getAttachedEvents (req, res) {
     try{
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        let site;
-        if(req.params.site){
-            site = req.params.site;
-        }else {
-            const existingSite = await Sites.findOne({where : {address : req.get('origin')} });
-            site = existingSite.uuid;
-        }
-        const events = await Events.findAll({ where: { siteUuid: site,  customerUuid: customerUuid }});
+        const siteUuid = await EventsServices.checkQueryParamsOrOrigin({query: req.params.site, origin: req.get('origin')});
+        const events = await Events.findAll({ where: { siteUuid: siteUuid,  customerUuid: customerUuid }});
         let result = [];
         events.map( event => {
             result.push(event.dataValues.typeEvent);
@@ -146,20 +131,14 @@ async function getEvents (req, res) {
     try{
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        let site;
-        if(req.params.site){
-            site = req.params.site;
-        }else {
-            const existingSite = await Sites.findOne({where : {address : req.get('origin')} });
-            site = existingSite.uuid
-        }
-        const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: site }});
+        const siteUuid = await EventsServices.checkQueryParamsOrOrigin({query: req.params.site, origin: req.get('origin')});
+        const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: siteUuid }});
         if(events.length){
             events.map( async event => {
                 try {
                     const type = event.dataValues.typeEvent;
                     if(type === req.params.event){
-                        const data = await db[type].findAll({ where: { siteUuid: site }} );
+                        const data = await db[type].findAll({ where: { siteUuid: siteUuid }} );
 
                         const result = {};
                         result[event.dataValues.typeEvent] = data;

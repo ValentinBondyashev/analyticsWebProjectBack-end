@@ -8,7 +8,7 @@ router.post('/attach', EventController.attachEvents);
 
 /*GET*/
 router.get('/attach/:site*?', EventController.getAttachedEvents);
-router.get('/all/:site*?/:filter*?', EventController.getActions);  /**/
+router.get('/all/*', EventController.getActions);  /**/
 router.get('/get/:event/:site*?', EventController.getEvents);
 router.get('/allTypes', EventController.getAllTypes);
 router.get('/clicks/sort', EventController.getAllSortClicks);
