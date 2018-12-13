@@ -20,17 +20,22 @@ async function register (req, res) {
                         email: customer.email
                     };
                     const finalCustomer = await Customer.create(newCustomer);
-                    const today = new Date();
-                    const expirationDate = new Date(today);
-                    expirationDate.setDate(today.getDate() + 60);
+                    // const today = new Date();
+                    // const expirationDate = new Date(today);
+                    // expirationDate.setDate(today.getDate() + 60);
 
                     const token = jwt.sign({
                         email: finalCustomer.email,
                         id: finalCustomer.id,
                         uuid: finalCustomer.uuid,
-                        exp: parseInt(expirationDate.getTime() / 1000, 10),
-                    }, process.env.JWT_SECRET);
-                    res.json({token: token});
+                        // exp: parseInt(expirationDate.getTime() / 1000, 10),
+                    }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
+
+                    const refreshToken = jwt.sign({
+                        uuid: finalCustomer.uuid,
+                    }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
+
+                    res.json({token: token, refreshToken: refreshToken});
                 } else {
                     res.status(400).send(err);
                 }
@@ -61,19 +66,22 @@ async function login(req, res, next) {
                             res.send({ success : false, message : 'authentication failed' });
                         }
                         if (passportUser) {
-                            const today = new Date();
-                            const expirationDate = new Date(today);
-                            expirationDate.setDate(today.getDate() + 60);
+                            // const today = new Date();
+                            // const expirationDate = new Date(today);
+                            // expirationDate.setDate(today.getDate() + 60);
 
                             const token = jwt.sign({
                                 email: passportUser.email,
                                 id: passportUser.id,
                                 uuid: passportUser.uuid,
-                                exp: parseInt(expirationDate.getTime() / 1000, 10),
-                            }, process.env.JWT_SECRET);
+                                // exp: parseInt(expirationDate.getTime() / 1000, 10),
+                            }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
 
+                            const refreshToken = jwt.sign({
+                                uuid: finalCustomer.uuid,
+                            }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
 
-                            return res.json({token: token});
+                            return res.json({token: token, refreshToken: refreshToken});
                         }
                         res.status(400);
                     })(req, res);

@@ -75,10 +75,11 @@ async function deleteAttachEvents ( req, res ) {
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
         const { body : { siteUuid, events } } = req;
         events.map(async (event) => {
-            try {await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
-           } catch( err ){
-               res.status(404).json({error: err});
-           }
+            try {
+                await Events.destroy({ where: { customerUuid: customerUuid, siteUuid: siteUuid, typeEvent: event }});
+            } catch( err ){
+                res.status(404).json({error: err});
+            }
         });
         res.json({success: true});
     } catch (err) {
@@ -166,25 +167,20 @@ async function getAllSortClicks (req, res) {
     try{
         const { headers: { authorization } } = req;
         const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
-        const site = await Sites.findOne({where : {address : req.get('origin')} });
+        const site = await Sites.findOne({ where : { address : req.get('origin') } });
         const event = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: 'clicks' }});
         if(event){
-            const clicks = await Clicks.findAll({ where: { siteUuid: site.uuid }, include: [
-                    {
-                        model: Parents
-                    }
-                ]});
+            const clicks = await Clicks.findAll({ where: { siteUuid: site.uuid }, include: [ {model: Parents} ] });
             let sortClicks = [];
             clicks.map((click) => {
                 if(sortClicks.length) {
                     sortClicks.map((sortClick, index) => {
-                        let check = false;
+                        let checkAvailable = false;
                         if (click.className === sortClick.className && click.parent.uuid === sortClick.parent.uuid) {
-                            check = true;
-
+                            checkAvailable = true;
                         }
                         if(sortClicks.length === index + 1){
-                            check ?
+                            checkAvailable ?
                                 sortClicks[index].count = sortClicks[index].count + 1
                                 :   sortClicks.push(Object.assign(click.dataValues, {count: 1}));
                         }

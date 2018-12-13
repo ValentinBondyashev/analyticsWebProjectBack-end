@@ -1,6 +1,7 @@
 const jwtDecode = require('jwt-decode');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+
 /*
     token - your token
     info - information that you want get
