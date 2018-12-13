@@ -1,7 +1,5 @@
 const jwt = require('express-jwt');
 const jwtDecode = require('jwt-decode');
-const db = require('../models');
-const Customers = db.customers;
 
 const getTokenFromHeaders = (req) => {
     const { headers: { authorization } } = req;
@@ -20,9 +18,10 @@ const tokenCheck = async (req, res, next) => {
         if(expirationDate < new Date()){
             return res.status(401).send({
                 "error": true,
-                "message": 'your token time off'
+                "message": 'your access token is rotten'
             });
         }
+        next()
     } else {
         return res.status(403).send({
             "error": true,

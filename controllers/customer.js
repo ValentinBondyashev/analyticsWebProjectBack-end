@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const db = require('../models');
 const Customer = db.customers;
 const { CustomerSchema } = require('../validators');
+const { CustomerServices } = require('../services');
 
 async function register (req, res) {
     try{
@@ -14,28 +15,27 @@ async function register (req, res) {
             try {
                 if (!err) {
                     const hash = crypto.pbkdf2Sync(data.password, process.env.SALT_ROUNDS, 10000, 512, 'sha512').toString('hex');
-                    const newCustomer = {
-                        uuid: uuidv1(),
-                        hash: hash,
-                        email: customer.email
-                    };
-                    const finalCustomer = await Customer.create(newCustomer);
-                    // const today = new Date();
-                    // const expirationDate = new Date(today);
-                    // expirationDate.setDate(today.getDate() + 60);
-
-                    const token = jwt.sign({
-                        email: finalCustomer.email,
-                        id: finalCustomer.id,
-                        uuid: finalCustomer.uuid,
-                        // exp: parseInt(expirationDate.getTime() / 1000, 10),
-                    }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
+                    const uuid = uuidv1();
 
                     const refreshToken = jwt.sign({
-                        uuid: finalCustomer.uuid,
+                        uuid: uuid,
                     }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
 
-                    res.json({token: token, refreshToken: refreshToken});
+                    const newCustomer = {
+                        uuid: uuid,
+                        hash: hash,
+                        email: customer.email,
+                        refreshToken: refreshToken
+                    };
+
+                    const finalCustomer = await Customer.create(newCustomer);
+
+                    const accessToken = jwt.sign({
+                        email: finalCustomer.email,
+                        uuid: finalCustomer.uuid,
+                    }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
+
+                    res.json({accessToken: accessToken, refreshToken: finalCustomer.refreshToken});
                 } else {
                     res.status(400).send(err);
                 }
@@ -58,7 +58,7 @@ async function login(req, res, next) {
                     res.status(400);
                     res.send(err);
                 } else {
-                    passport.authenticate('local', {session: false}, (err, passportUser) => {
+                    passport.authenticate('local', {session: false}, async (err, passportUser) => {
                         if (err) {
                             return next(err);
                         }
@@ -66,22 +66,18 @@ async function login(req, res, next) {
                             res.send({ success : false, message : 'authentication failed' });
                         }
                         if (passportUser) {
-                            // const today = new Date();
-                            // const expirationDate = new Date(today);
-                            // expirationDate.setDate(today.getDate() + 60);
-
-                            const token = jwt.sign({
+                            const accessToken = jwt.sign({
                                 email: passportUser.email,
-                                id: passportUser.id,
                                 uuid: passportUser.uuid,
-                                // exp: parseInt(expirationDate.getTime() / 1000, 10),
                             }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
 
                             const refreshToken = jwt.sign({
-                                uuid: finalCustomer.uuid,
+                                uuid: passportUser.uuid,
                             }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
 
-                            return res.json({token: token, refreshToken: refreshToken});
+                            await Customer.update({ refreshToken: refreshToken},{ where: {uuid : passportUser.uuid} });
+
+                            return res.json({accessToken: accessToken, refreshToken: refreshToken});
                         }
                         res.status(400);
                     })(req, res);
@@ -95,9 +91,37 @@ async function login(req, res, next) {
     }
 }
 
+async function refreshToken ( req, res ) {
+    try {
+        const { refreshToken } = req.body;
+        const decoded = CustomerServices.getCustomerInfo(refreshToken, 'all');
+        const customer = await Customer.findOne({ where: { uuid: decoded.uuid } });
+        const expirationDate = new Date(decoded.exp * 1000);
 
+        if(refreshToken === customer.refreshToken){
+            if(expirationDate < new Date()){
+                res.status(400).json({error: 'You need re-login'})
+            }
+            const newRefreshToken = jwt.sign({
+                uuid: customer.uuid,
+            }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
+            const newAccessToken = jwt.sign({
+                email: customer.email,
+                uuid: customer.uuid,
+            }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
+
+            await Customer.update({ refreshToken: newRefreshToken},{ where: {refreshToken : refreshToken} });
+            res.json({refreshToken: newRefreshToken, accessToken: newAccessToken});
+        }else{
+            res.status(400).json({error: 'Refresh token is incorrect. Please re-login.'})
+        }
+    } catch (err) {
+        res.status(400).json({error: err})
+    }
+}
 
 module.exports = {
     register,
-    login
+    login,
+    refreshToken
 };

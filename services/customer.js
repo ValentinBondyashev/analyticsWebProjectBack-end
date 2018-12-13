@@ -8,7 +8,10 @@ const jwt = require('jsonwebtoken');
 */
 const getCustomerInfo = (token, info) => {
     const clearToken = token.split(' ')[1];
-    const decoded = jwtDecode(clearToken);
+    const decoded = jwtDecode(clearToken || token);
+    if(info === 'all'){
+        return decoded
+    }
     return decoded[info]
 };
 
@@ -18,13 +21,9 @@ const validatePassword = (password, hash) => {
 };
 
 const generToken = (customer) => {
-    const today = new Date();
-    const expirationDate = new Date(today);
-    expirationDate.setDate(today.getDate() + 60);
     const token = jwt.sign({
         email: customer.email,
         uuid: customer.uuid,
-        exp: parseInt(expirationDate.getTime() / 1000, 10),
     }, process.env.JWT_SECRET);
     return token
 };
