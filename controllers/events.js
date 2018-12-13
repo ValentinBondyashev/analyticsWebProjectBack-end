@@ -25,7 +25,7 @@ async function addEvents (req, res) {
                                 await Users.create({ uuid: uuidv1(), sessionId : event.sessionId, siteUuid: siteUuid});
                             }
                             if(db[key]){
-                                await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, parentUuid: parentUuid, ...event });
+                                await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, parentUuid: parentUuid, idElement: event.id, ...event });
                             }
                         });
                 } catch (err) {

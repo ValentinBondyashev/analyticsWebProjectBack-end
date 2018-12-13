@@ -12,6 +12,7 @@ module.exports = {
         className: DataTypes.STRING,
         innerText: DataTypes.STRING,
         isTracking: DataTypes.STRING,
+        idElement: DataTypes.STRING,
         parentUuid: {
             type: DataTypes.UUID,
             allowNull: false
