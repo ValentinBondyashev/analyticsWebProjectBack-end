@@ -56,7 +56,7 @@ async function addEvents (req, res) {
 async function attachEvents ( req, res ) {
     try {
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const { body : { site } } = req;
         await Promise.all(
             site.events.map( async event => {
@@ -85,7 +85,7 @@ async function attachEvents ( req, res ) {
 async function deleteAttachEvents ( req, res ) {
     try {
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const { body : { siteUuid, events } } = req;
         events.map(async (event) => {
             try {
@@ -103,7 +103,7 @@ async function deleteAttachEvents ( req, res ) {
 async function getActions ( req, res ) {
     try{
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const query = querystring.parse(req.url);
         const { filter } = query;
         const siteUuid = await EventsServices.checkQueryParamsOrOrigin({query: query.site, origin: req.get('origin')});
@@ -134,7 +134,7 @@ async function getActions ( req, res ) {
 async function getAttachedEvents (req, res) {
     try{
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const siteUuid = await EventsServices.checkQueryParamsOrOrigin({query: req.params.site, origin: req.get('origin')});
         const events = await Events.findAll({ where: { siteUuid: siteUuid,  customerUuid: customerUuid }});
         let result = [];
@@ -150,7 +150,7 @@ async function getAttachedEvents (req, res) {
 async function getEvents (req, res) {
     try{
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const siteUuid = await EventsServices.checkQueryParamsOrOrigin({query: req.params.site, origin: req.get('origin')});
         const events = await Events.findAll({ where: { customerUuid: customerUuid, siteUuid: siteUuid }});
         if(events.length){
@@ -179,7 +179,7 @@ async function getEvents (req, res) {
 async function getAllSortClicks (req, res) {
     try{
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const site = await Sites.findOne({ where : { address : req.get('origin') } });
         const event = await Events.findOne({ where: { customerUuid: customerUuid, siteUuid: site.uuid, typeEvent: 'clicks' }});
         if(event){

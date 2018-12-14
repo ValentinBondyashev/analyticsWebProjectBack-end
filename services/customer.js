@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 
 /*
     token - your token
-    info - information that you want get
+    type - information that you want to get
 */
-const getCustomerInfo = (token, info) => {
+const getCustomerInfo = ({token: token, type: info}) => {
     const clearToken = token.split(' ')[1];
     const decoded = jwtDecode(clearToken || token);
-    if(info === 'all'){
+    if (info === 'all') {
         return decoded
     }
     return decoded[info]

@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const db = require('../models');
 const Customer = db.customers;
-const { CustomerSchema } = require('../validators');
-const { CustomerServices } = require('../services');
+const {CustomerSchema} = require('../validators');
+const {CustomerServices} = require('../services');
 
-async function register (req, res) {
-    try{
-        const { body: { customer } } = req;
+async function register(req, res) {
+    try {
+        const {body: {customer}} = req;
         Joi.validate(customer, CustomerSchema.register, async (err, data) => {
             try {
                 if (!err) {
@@ -19,7 +19,7 @@ async function register (req, res) {
 
                     const refreshToken = jwt.sign({
                         uuid: uuid,
-                    }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
+                    }, process.env.JWT_SECRET_REFRESH, {expiresIn: process.env.REFRESH_TOKEN_LIFE});
 
                     const newCustomer = {
                         uuid: uuid,
@@ -32,14 +32,14 @@ async function register (req, res) {
                     const accessToken = jwt.sign({
                         email: finalCustomer.email,
                         uuid: finalCustomer.uuid,
-                    }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
+                    }, process.env.JWT_SECRET, {expiresIn: process.env.TOKEN_LIFE});
 
                     res.json({accessToken: accessToken, refreshToken: finalCustomer.refreshToken});
                 } else {
                     res.status(400).send(err);
                 }
             } catch (err) {
-                res.status(400).json( err.errors[0].message );
+                res.status(400).json(err.errors[0].message);
             }
         });
     }
@@ -61,20 +61,20 @@ async function login(req, res, next) {
                         if (err) {
                             return next(err);
                         }
-                        if(!passportUser){
-                            res.send({ success : false, message : 'authentication failed' });
+                        if (!passportUser) {
+                            res.send({success: false, message: 'authentication failed'});
                         }
                         if (passportUser) {
                             const accessToken = jwt.sign({
                                 email: passportUser.email,
                                 uuid: passportUser.uuid,
-                            }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
+                            }, process.env.JWT_SECRET, {expiresIn: process.env.TOKEN_LIFE});
 
                             const refreshToken = jwt.sign({
                                 uuid: passportUser.uuid,
-                            }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
+                            }, process.env.JWT_SECRET_REFRESH, {expiresIn: process.env.REFRESH_TOKEN_LIFE});
 
-                            await Customer.update({ refreshToken: refreshToken},{ where: {uuid : passportUser.uuid} });
+                            await Customer.update({refreshToken: refreshToken}, {where: {uuid: passportUser.uuid}});
 
                             return res.json({accessToken: accessToken, refreshToken: refreshToken});
                         }
@@ -84,34 +84,34 @@ async function login(req, res, next) {
                 res.status(400).json(err);
             }
         });
-    } catch ( err ) {
+    } catch (err) {
         res.status(400).json({message: "Error", details: err});
     }
 }
 
-async function refreshToken ( req, res ) {
+async function refreshToken(req, res) {
     try {
-        const { refreshToken } = req.body;
-        const decoded = CustomerServices.getCustomerInfo(refreshToken, 'all');
-        const customer = await Customer.findOne({ where: { uuid: decoded.uuid } });
+        const {refreshToken} = req.body;
+        const decoded = CustomerServices.getCustomerInfo({token:refreshToken, type:'all'});
+        const customer = await Customer.findOne({where: {uuid: decoded.uuid}});
         const expirationDate = new Date(decoded.exp * 1000);
-        if(refreshToken === customer.refreshToken){
-            if(expirationDate < new Date()){
-                res.status(400).json({ error: 'You need re-login' })
+        if (refreshToken === customer.refreshToken) {
+            if (expirationDate < new Date()) {
+                res.status(400).json({error: 'You need to re-login'})
             }
             const newRefreshToken = jwt.sign({
                 uuid: customer.uuid,
-            }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE });
+            }, process.env.JWT_SECRET_REFRESH, {expiresIn: process.env.REFRESH_TOKEN_LIFE});
 
             const newAccessToken = jwt.sign({
                 email: customer.email,
                 uuid: customer.uuid,
-            }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE });
+            }, process.env.JWT_SECRET, {expiresIn: process.env.TOKEN_LIFE});
 
-            await Customer.update({ refreshToken: newRefreshToken },{ where: { refreshToken : refreshToken } });
+            await Customer.update({refreshToken: newRefreshToken}, {where: {refreshToken: refreshToken}});
             res.json({refreshToken: newRefreshToken, accessToken: newAccessToken});
-        }else{
-            res.status(400).json({ error: 'Refresh token is incorrect. Please re-login.' })
+        } else {
+            res.status(400).json({error: 'Refresh token is incorrect. Please re-login.'})
         }
     } catch (err) {
         res.status(400).json({error: err})

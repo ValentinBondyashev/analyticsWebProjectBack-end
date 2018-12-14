@@ -9,7 +9,7 @@ async function addSite (req, res) {
     try{
         const { body: { site } } = req;
         const { headers: { authorization } } = req;
-        const uuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const uuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const availableSite = await Sites.findOne({
             where: { address: site },
             include: [{
@@ -42,7 +42,7 @@ async function deleteSite (req, res) {
     try{
         const { params: { uuid } } = req;
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const deletedSite = await WatcherSite.destroy({where: {customerId : customerUuid, siteId: uuid}});
         res.json({ deletedSite: deletedSite })
     } catch ( err ) {
@@ -53,7 +53,7 @@ async function deleteSite (req, res) {
 async function getSites (req, res) {
     try{
         const { headers: { authorization } } = req;
-        const uuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const uuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const sites = await Sites.findAll({ include: [{
                 model: Customers,
                 as: 'Watcher',
@@ -70,7 +70,7 @@ async function editAddress (req, res) {
     try{
         const { body: { address, uuid } } = req;
         const { headers: { authorization } } = req;
-        const customerUuid = CustomerServices.getCustomerInfo(authorization, 'uuid');
+        const customerUuid = CustomerServices.getCustomerInfo({token:authorization, type:'uuid'});
         const customer = await Customers.findOne({ where: { uuid: customerUuid } });
         await WatcherSite.destroy({where: {customerId : customerUuid, siteId: uuid}});
 

@@ -5,9 +5,9 @@ const Routes = db.routes;
 const Users = db.users;
 const Sites = db.sites;
 
-async function addRoute (req, res) {
-    try{
-        const { body: { oldUrl, newUrl, sessionId } } = req;
+async function addRoute(req, res) {
+    try {
+        const {body: {oldUrl, newUrl, sessionId}} = req;
         const route = {
             uuid: uuidv1(),
             userSessionId: sessionId,
@@ -15,16 +15,15 @@ async function addRoute (req, res) {
             to: newUrl
         };
         const createdRoute = Routes.create(route);
-
         res.json({createdRoute: createdRoute})
     } catch (err) {
         res.status(400).json({error: err});
     }
 }
 
-async function getAllRoutes (req, res) {
-    try{
-        const { params: { site }} = req;
+async function getAllRoutes(req, res) {
+    try {
+        const {params: {site}} = req;
         const allRoutes = await Sites.findOne({
             where: {uuid: site},
             attributes: ['address', 'uuid'],
