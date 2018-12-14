@@ -6,6 +6,6 @@ router.post('/register', CustomerController.register);
 
 router.post('/login', CustomerController.login);
 
-
+router.post('/refreshToken', CustomerController.refreshToken);
 
 module.exports = router;

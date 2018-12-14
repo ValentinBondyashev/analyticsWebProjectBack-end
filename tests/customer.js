@@ -1,13 +1,10 @@
 process.env.NODE_ENV = 'test';
-
-const uuidv1 = require('uuid/v1');
 const db = require('../models');
 const Customers = db.customers;
 
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
-let should = chai.should();
 
 chai.use(chaiHttp);
 
