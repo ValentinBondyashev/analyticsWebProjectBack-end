@@ -10,8 +10,7 @@ passport.use(new LocalStrategy({
 }, (email, password, done) => {
     Customer.findOne({ where :{email : email} })
         .then((customer) => {
-            const hash = customer.dataValues.hash;
-            if(!customer || !CustomerServices.validatePassword(password, hash)) {
+            if(!customer || !CustomerServices.validatePassword(password,  customer.hash)) {
                 return done(null, false, { errors: { 'email or password': 'is invalid' } });
             }
             return done(null, customer.dataValues);

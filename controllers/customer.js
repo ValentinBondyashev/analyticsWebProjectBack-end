@@ -79,7 +79,6 @@ async function login(req, res, next) {
 
                             return res.json({accessToken: accessToken, refreshToken: refreshToken});
                         }
-                        res.status(400);
                     })(req, res);
                 }
             } catch (err) {
