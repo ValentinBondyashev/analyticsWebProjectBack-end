@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'test';
 
 const db = require('../models');
-
+const { CustomerServices } = require('../services');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
@@ -30,16 +30,20 @@ describe('========= ** Routes ** =========', () => {
 
     describe('/GET routes', () => {
         it('it should GET get all routes', (done) => {
-            db.sites.findOne({where: {address: 'test1.com'}})
-                .then((site) => {
-                    chai.request(server)
-                        .get('/api/routes/all/' + site.uuid)
-                        .end((err, res) => {
-                            res.should.have.status(200);
-                            res.body.should.be.a('object');
-                            res.body.should.have.property('allRoutes');
-                            done();
-                        })
+            db.customers.findOne({where: { email: 'test@test.test'}})
+                .then(customer => {
+                    db.sites.findOne({where: {address: 'test1.com'}})
+                        .then((site) => {
+                            chai.request(server)
+                                .get('/api/routes/all/' + site.uuid)
+                                .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
+                                .end((err, res) => {
+                                    res.should.have.status(200);
+                                    res.body.should.be.a('object');
+                                    res.body.should.have.property('allRoutes');
+                                    done();
+                                })
+                        }).catch(done);
                 }).catch(done);
         });
     });

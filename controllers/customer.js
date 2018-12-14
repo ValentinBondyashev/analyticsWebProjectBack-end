@@ -97,21 +97,21 @@ async function refreshToken ( req, res ) {
         const expirationDate = new Date(decoded.exp * 1000);
         if(refreshToken === customer.refreshToken){
             if(expirationDate < new Date()){
-                res.status(400).json({error: 'You need re-login'})
+                res.status(400).json({ error: 'You need re-login' })
             }
             const newRefreshToken = jwt.sign({
                 uuid: customer.uuid,
-            }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
+            }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE });
 
             const newAccessToken = jwt.sign({
                 email: customer.email,
                 uuid: customer.uuid,
-            }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE});
+            }, process.env.JWT_SECRET, { expiresIn: process.env.TOKEN_LIFE });
 
-            await Customer.update({ refreshToken: newRefreshToken},{ where: {refreshToken : refreshToken} });
+            await Customer.update({ refreshToken: newRefreshToken },{ where: { refreshToken : refreshToken } });
             res.json({refreshToken: newRefreshToken, accessToken: newAccessToken});
         }else{
-            res.status(400).json({error: 'Refresh token is incorrect. Please re-login.'})
+            res.status(400).json({ error: 'Refresh token is incorrect. Please re-login.' })
         }
     } catch (err) {
         res.status(400).json({error: err})

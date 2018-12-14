@@ -1,14 +1,4 @@
-const jwt = require('express-jwt');
 const jwtDecode = require('jwt-decode');
-
-const getTokenFromHeaders = (req) => {
-    const { headers: { authorization } } = req;
-
-    if(authorization && authorization.split(' ')[0] === 'Token') {
-        return authorization.split(' ')[1];
-    }
-    return null;
-};
 
 const tokenCheck = async (req, res, next) => {
     const token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization && req.headers.authorization.split(' ')[1];
@@ -31,17 +21,6 @@ const tokenCheck = async (req, res, next) => {
 };
 
 const auth = {
-    required: jwt({
-        secret: 'secret',
-        userProperty: 'payload',
-        getToken: getTokenFromHeaders,
-    }),
-    optional: jwt({
-        secret: 'secret',
-        userProperty: 'payload',
-        getToken: getTokenFromHeaders,
-        credentialsRequired: false,
-    }),
     tokenCheck : tokenCheck
 };
 

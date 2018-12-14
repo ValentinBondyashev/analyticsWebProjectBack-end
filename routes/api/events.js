@@ -6,16 +6,16 @@ const auth = require('../../middleware/auth');
 
 /*POST*/
 router.post('/add', EventController.addEvents);
-router.post('/attach', EventController.attachEvents);
+router.post('/attach', auth.tokenCheck, EventController.attachEvents);
 
 /*GET*/
-router.get('/attach/:site*?', EventController.getAttachedEvents);
-router.get('/all/*', EventController.getActions);
-router.get('/get/:event/:site*?', EventController.getEvents);
+router.get('/attach/:site*?', auth.tokenCheck, EventController.getAttachedEvents);
+router.get('/all/*', auth.tokenCheck, EventController.getActions);
+router.get('/get/:event/:site*?', auth.tokenCheck, EventController.getEvents);
 router.get('/allTypes', EventController.getAllTypes);
-router.get('/clicks/sort',  EventController.getAllSortClicks);
+router.get('/clicks/sort',  auth.tokenCheck, EventController.getAllSortClicks);
 
 /*DELETE*/
-router.delete('/deleteAttach', EventController.deleteAttachEvents);
+router.delete('/deleteAttach', auth.tokenCheck, EventController.deleteAttachEvents);
 
 module.exports = router;

@@ -7,6 +7,8 @@ const Events = db.events;
 const Sites = db.sites;
 const Clicks = db.clicks;
 const Parents = db.parents;
+const Sequelize = require('sequelize');
+const op = Sequelize.Op;
 
 async function addEvents (req, res) {
     try{
@@ -15,8 +17,20 @@ async function addEvents (req, res) {
         const siteUuid = site.uuid;
         for(let key in body ){
             await body[key].map(async event => {
+                try {
                     const { className, localName, innerText, isTracking } = event.parent;
-                    const parent = await Parents.findOrCreate({where: {className: className, tag: localName}, defaults: {isTracking: isTracking,innerText: innerText, uuid: uuidv1()}  })
+                    const parent = await Parents.findOrCreate(
+                        {where:
+                                {
+                                    className: {[op.and] :className},
+                                    tag: {[op.and] :localName},
+                                    defaults: {
+                                        isTracking: {[op.and]: isTracking},
+                                        innerText: {[op.and]:innerText},
+                                        uuid: {[op.and]:uuidv1()}
+                                    }
+                                }
+                        })
                         .spread(async (parent, created) => {
                             const parentUuid = parent.get().uuid;
                             const user = await Users.findOne({ where : { sessionId: event.sessionId }});
@@ -27,6 +41,9 @@ async function addEvents (req, res) {
                                 await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, parentUuid: parentUuid, idElement: event.id, ...event });
                             }
                         });
+                } catch (err) {
+                    res.status(400)
+                }
             });
         }
         res.json({success: true});
