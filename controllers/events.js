@@ -15,7 +15,6 @@ async function addEvents (req, res) {
         const siteUuid = site.uuid;
         for(let key in body ){
             await body[key].map(async event => {
-                try {
                     const { className, localName, innerText, isTracking } = event.parent;
                     const parent = await Parents.findOrCreate({where: {className: className, tag: localName}, defaults: {isTracking: isTracking,innerText: innerText, uuid: uuidv1()}  })
                         .spread(async (parent, created) => {
@@ -28,9 +27,6 @@ async function addEvents (req, res) {
                                 await db[key].create({ uuid: uuidv1(), sessionId: event.sessionId , siteUuid: siteUuid, parentUuid: parentUuid, idElement: event.id, ...event });
                             }
                         });
-                } catch (err) {
-                    res.status(400).json({error: err});
-                }
             });
         }
         res.json({success: true});
@@ -181,7 +177,6 @@ async function getAllSortClicks (req, res) {
                         let check = false;
                         if (click.className === sortClick.className && click.parent.uuid === sortClick.parent.uuid) {
                             check = true;
-
                         }
                         if(sortClicks.length === index + 1){
                             check ?
@@ -192,7 +187,6 @@ async function getAllSortClicks (req, res) {
                 } else {
                     sortClicks.push(Object.assign(click.dataValues, {count: 1}))
                 }
-                return null
             });
             res.json(sortClicks);
         }else {
