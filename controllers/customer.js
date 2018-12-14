@@ -29,7 +29,6 @@ async function register (req, res) {
                     };
 
                     const finalCustomer = await Customer.create(newCustomer);
-
                     const accessToken = jwt.sign({
                         email: finalCustomer.email,
                         uuid: finalCustomer.uuid,
