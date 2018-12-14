@@ -97,7 +97,6 @@ async function refreshToken ( req, res ) {
         const decoded = CustomerServices.getCustomerInfo(refreshToken, 'all');
         const customer = await Customer.findOne({ where: { uuid: decoded.uuid } });
         const expirationDate = new Date(decoded.exp * 1000);
-
         if(refreshToken === customer.refreshToken){
             if(expirationDate < new Date()){
                 res.status(400).json({error: 'You need re-login'})
@@ -105,6 +104,7 @@ async function refreshToken ( req, res ) {
             const newRefreshToken = jwt.sign({
                 uuid: customer.uuid,
             }, process.env.JWT_SECRET_REFRESH, { expiresIn: process.env.REFRESH_TOKEN_LIFE});
+
             const newAccessToken = jwt.sign({
                 email: customer.email,
                 uuid: customer.uuid,

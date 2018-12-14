@@ -12,8 +12,8 @@ router.post('/attach', EventController.attachEvents);
 router.get('/attach/:site*?', EventController.getAttachedEvents);
 router.get('/all/*', EventController.getActions);
 router.get('/get/:event/:site*?', EventController.getEvents);
-router.get('/allTypes', EventController.getAllTypes);
-router.get('/clicks/sort', auth.tokenCheck, EventController.getAllSortClicks);
+router.get('/allTypes', auth.tokenCheck, EventController.getAllTypes);
+router.get('/clicks/sort',  EventController.getAllSortClicks);
 
 /*DELETE*/
 router.delete('/deleteAttach', EventController.deleteAttachEvents);
