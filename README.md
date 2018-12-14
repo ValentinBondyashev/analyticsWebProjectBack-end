@@ -157,7 +157,7 @@
 	}
 </details>	
 
-### 2) Get all actions : /api/events/all/:siteUuid/:filter*? (GET)  // filter is optional parametr
+### 2) Get all actions : /api/events/all/&site="siteUuid"&filter="clicks"   //"filter" and "site" are optional parametrs
 
 <details>
 <summary>show headers</summary>

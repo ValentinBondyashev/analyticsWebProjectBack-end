@@ -5,7 +5,6 @@ const db = require('../models');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
-let should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -71,6 +70,15 @@ describe('========= ** Events ** =========', () => {
                                     "sessionId": "1542629669143",
                                     "localName": "p",
                                     "className": "p",
+                                    "parent": {
+                                        "uuid": "38cd6290-fdf1-11e8-9f51-a3f44eeef008",
+                                        "className": "main-menu",
+                                        "isTracking": null,
+                                        "innerText": "LogoAdd new site for analizeCheck statistic\nLog out\n",
+                                        "tag": "div",
+                                        "createdAt": "2018-12-12T09:35:11.692Z",
+                                        "updatedAt": "2018-12-12T09:35:11.692Z"
+                                    },
                                     "innerText": "footer works!"
                                 },
                             ],
@@ -80,6 +88,15 @@ describe('========= ** Events ** =========', () => {
                                     "sessionId": "1542629669143",
                                     "className": "p",
                                     "localName": "12we12e12s",
+                                    "parent": {
+                                        "uuid": "38cd6290-fdf1-11e8-9f51-a3f44eeef008",
+                                        "className": "main-menu",
+                                        "isTracking": null,
+                                        "innerText": "LogoAdd new site for analizeCheck statistic\nLog out\n",
+                                        "tag": "div",
+                                        "createdAt": "2018-12-12T09:35:11.692Z",
+                                        "updatedAt": "2018-12-12T09:35:11.692Z"
+                                    },
                                     "targetValue": "footer works!",
                                     "targetId": "1212s"
                                 }]
@@ -145,7 +162,7 @@ describe('/GET Events', () => {
                     .set('Authorization', 'Token ' + CustomerServices.generToken(customer.dataValues))
                     .end((err, res) => {
                         res.should.have.status(200);
-                        res.body.should.be.a('object');
+                        res.body.should.be.a('array');
                         done();
                     })
             }).catch(done);
