@@ -16,7 +16,10 @@
  <details>
   <summary>show response</summary>
 
-	{ token: eyJhbGciOiJIUzI1NiIJ9.LmNvbSIsInV1aWQIMTU0Mjk2NzM5MH0.e5gcG4hsp3eA_eWowOD9HvILYxM }
+	{
+		"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMDI0NTU4NTAtZmY2Yy0xMWU4LWJiNDEt",
+    		"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFYFrMVEEz"
+	}
  </details>
 	
 
@@ -36,8 +39,31 @@
  <details>
   <summary>show response</summary>
 
-	{ token: eyJhbGciOiJIUzI1NiIJ9.LmNvbSIsInV1aWQIMTU0Mjk2NzM5MH0.e5gcG4hsp3eA_eWowOD9HvILYxM }
+	{ 
+		"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMDI0NTU4NTAtZmY2Yy0xMWU4LWJiNDEt",
+    		"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFYFrMVEEz"
+	}
  </details>
+ 
+ ### 3) Refresh Token :  /api/customer/refreshToken (POST)
+ <details>
+  <summary>show body</summary>
+
+	body : {
+		"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMDI0NTU4NTAtZmY2Yy0xMWU4LWJiNDEt",
+    		"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFYFrMVEEz"
+	}
+	
+ </details>
+ <details>
+  <summary>show response</summary>
+
+	{ 
+		"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMDI0NTU4NTAtZmY2Yy0xMWU4LWJiNDEt",
+    		"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFYFrMVEEz" 
+	}
+ </details>
+
 		
   ## SITE
 ### 1) Add new site : /api/sites/add (POST) 
